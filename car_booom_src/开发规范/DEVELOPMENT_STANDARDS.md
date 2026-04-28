@@ -370,4 +370,4 @@ push_error("[DamageSystem] Damage calculation overflow")
 
 *文档版本：1.0*
 *最后更新：2026-04-28*
-*主维护者：🙃（cjs）*
+*主维护者：新街*
