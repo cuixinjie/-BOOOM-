@@ -1,0 +1,80 @@
+[gd_scene load_steps=2 format=3 uid="uid://driver_hud"]
+
+[ext_resource type="Script" path="res://scripts/ui/DriverHUD.gd" id="1"]
+
+[node name="DriverHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 300.0
+offset_bottom = 400.0
+
+[node name="HealthContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBox/HealthContainer"]
+layout_mode = 2
+text = "血量"
+
+[node name="HealthBar" type="ProgressBar" parent="VBox/HealthContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 100.0
+
+[node name="EnergyContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBox/EnergyContainer"]
+layout_mode = 2
+text = "能量"
+
+[node name="EnergyBar" type="ProgressBar" parent="VBox/EnergyContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 100.0
+
+[node name="StaminaContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBox/StaminaContainer"]
+layout_mode = 2
+text = "耐力"
+
+[node name="StaminaBar" type="ProgressBar" parent="VBox/StaminaContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+value = 100.0
+
+[node name="CoinContainer" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBox/CoinContainer"]
+layout_mode = 2
+text = "金币"
+
+[node name="CoinLabel" type="Label" parent="VBox/CoinContainer"]
+layout_mode = 2
+text = "0"
+
+[node name="ChaseIndicator" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 100.0
+grow_horizontal = 0
