@@ -1,0 +1,49 @@
+{
+  "pistol": {
+    "name": "手枪",
+    "damage": 10,
+    "fire_rate": 2.5,
+    "magazine_size": 6,
+    "reload_time": 1.5,
+    "spread": 0.05,
+    "bullet_speed": 800,
+    "bullet_scene": "res://scenes/entities/bullets/BulletPlayer.tscn",
+    "special": "精准单点"
+  },
+  "smg": {
+    "name": "冲锋枪",
+    "damage": 8,
+    "fire_rate": 5.0,
+    "magazine_size": 20,
+    "reload_time": 1.5,
+    "spread": 0.15,
+    "bullet_speed": 700,
+    "bullet_scene": "res://scenes/entities/bullets/BulletPlayer.tscn",
+    "special": "高速连发"
+  },
+  "shotgun": {
+    "name": "霰弹枪",
+    "damage": 5,
+    "fire_rate": 1.4,
+    "magazine_size": 6,
+    "reload_time": 2.0,
+    "spread": 0.0,
+    "spread_angle": 45.0,
+    "pellets": 5,
+    "bullet_speed": 600,
+    "bullet_scene": "res://scenes/entities/bullets/BulletPlayer.tscn",
+    "special": "扇形散射"
+  },
+  "sniper": {
+    "name": "狙击枪",
+    "damage": 40,
+    "fire_rate": 1.0,
+    "magazine_size": 4,
+    "reload_time": 1.8,
+    "spread": 0.0,
+    "bullet_speed": 1200,
+    "aim_line": true,
+    "bullet_scene": "res://scenes/entities/bullets/BulletPlayer.tscn",
+    "special": "一击必杀"
+  }
+}
