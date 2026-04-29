@@ -1,0 +1,67 @@
+{
+  "vehicle": {
+    "max_health": 100,
+    "max_energy": 100,
+    "energy_recovery_rate": 20,
+    "max_stamina": 100,
+    "stamina_recovery_rate": 15,
+    "base_speed": 200,
+    "sprint_speed": 350,
+    "sprint_stamina_cost": 30
+  },
+  "skills": {
+    "energy_shield": {
+      "name": "能量护盾",
+      "energy_cost": 25,
+      "cooldown": 8.0,
+      "duration": 3.0,
+      "damage_reduction": 0.5
+    },
+    "nitro_boost": {
+      "name": "氮气加速",
+      "energy_cost": 20,
+      "cooldown": 5.0,
+      "duration": 2.0,
+      "speed_boost": 1.5
+    },
+    "emp_burst": {
+      "name": "EMP干扰",
+      "energy_cost": 20,
+      "cooldown": 15.0,
+      "duration": 3.0,
+      "range": 5.0
+    },
+    "repair_kit": {
+      "name": "紧急维修",
+      "energy_cost": 25,
+      "cooldown": 20.0,
+      "heal_amount": 20
+    },
+    "ramming_attack": {
+      "name": "冲撞攻击",
+      "energy_cost": 35,
+      "cooldown": 10.0,
+      "damage": 50,
+      "speed_boost": 2.0
+    }
+  },
+  "追兵": {
+    "max_distance": 100,
+    "initial_distance": 50,
+    "approach_rate": 5,
+    "distance_reward_segment_complete": 10,
+    "distance_reward_repair": 15,
+    "catch_distance": 0
+  },
+  "breakdown_recovery": {
+    "total_time": 10.0,
+    "repair_charge_rate": 10.0,
+    "repair_drain_rate": 5.0,
+    "health_restored_percent": 0.3
+  },
+  "world_swap": {
+    "auto_swap_interval": 30.0,
+    "warning_duration": 2.0,
+    "swap_duration": 0.5
+  }
+}
