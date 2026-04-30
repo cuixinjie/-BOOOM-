@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ui_integration_test"]
-
-[ext_resource type="Script" path="res://scripts/ui/UIIntegrationTest.gd" id="1"]
-
-## UI 集成测试场景
-[node name="UIIntegrationTest" type="Node"]
-script = ExtResource("1")
