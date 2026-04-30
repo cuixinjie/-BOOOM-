@@ -1,7 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://main_scene"]
+[gd_scene load_steps=5 format=3 uid="uid://main_scene"]
 
 [ext_resource type="Script" path="res://scripts/ui/MenuController.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/HUDController.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://driver_hud" path="res://scenes/ui/hud/DriverHUD.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://shooter_hud" path="res://scenes/ui/hud/ShooterHUD.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://world_state_indicator" path="res://scenes/ui/hud/WorldStateIndicator.tscn" id="5"]
 
+## 主场景：包含菜单控制器和 HUD 系统
 [node name="MenuController" type="CanvasLayer"]
 script = ExtResource("1")
 
@@ -12,20 +17,20 @@ offset_top = 40.0
 offset_right = 440.0
 offset_bottom = 240.0
 
-[node name="Title" type="Label" parent="MainMenu"]
+[node name="Title" type="Label" parent="MenuController/MainMenu"]
 layout_mode = 2
 text = "MADMEN"
 horizontal_alignment = 1
 
-[node name="StartButton" type="Button" parent="MainMenu"]
+[node name="StartButton" type="Button" parent="MenuController/MainMenu"]
 layout_mode = 2
 text = "开始游戏"
 
-[node name="OptionsButton" type="Button" parent="MainMenu"]
+[node name="OptionsButton" type="Button" parent="MenuController/MainMenu"]
 layout_mode = 2
 text = "选项"
 
-[node name="QuitButton" type="Button" parent="MainMenu"]
+[node name="QuitButton" type="Button" parent="MenuController/MainMenu"]
 layout_mode = 2
 text = "退出"
 
@@ -36,20 +41,20 @@ offset_top = 40.0
 offset_right = 440.0
 offset_bottom = 240.0
 
-[node name="Title" type="Label" parent="PauseMenu"]
+[node name="Title" type="Label" parent="MenuController/PauseMenu"]
 layout_mode = 2
 text = "暂停"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="PauseMenu"]
+[node name="ResumeButton" type="Button" parent="MenuController/PauseMenu"]
 layout_mode = 2
 text = "继续"
 
-[node name="RestartButton" type="Button" parent="PauseMenu"]
+[node name="RestartButton" type="Button" parent="MenuController/PauseMenu"]
 layout_mode = 2
 text = "重新开始"
 
-[node name="QuitButton" type="Button" parent="PauseMenu"]
+[node name="QuitButton" type="Button" parent="MenuController/PauseMenu"]
 layout_mode = 2
 text = "返回主菜单"
 
@@ -60,16 +65,16 @@ offset_top = 40.0
 offset_right = 440.0
 offset_bottom = 240.0
 
-[node name="Title" type="Label" parent="GameOverScreen"]
+[node name="Title" type="Label" parent="MenuController/GameOverScreen"]
 layout_mode = 2
 text = "游戏结束"
 horizontal_alignment = 1
 
-[node name="RetryButton" type="Button" parent="GameOverScreen"]
+[node name="RetryButton" type="Button" parent="MenuController/GameOverScreen"]
 layout_mode = 2
 text = "重新开始"
 
-[node name="MenuButton" type="Button" parent="GameOverScreen"]
+[node name="MenuButton" type="Button" parent="MenuController/GameOverScreen"]
 layout_mode = 2
 text = "返回主菜单"
 
@@ -80,22 +85,54 @@ offset_top = 40.0
 offset_right = 440.0
 offset_bottom = 240.0
 
-[node name="Title" type="Label" parent="VictoryScreen"]
+[node name="Title" type="Label" parent="MenuController/VictoryScreen"]
 layout_mode = 2
 text = "胜利!"
 horizontal_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="VictoryScreen"]
+[node name="ContinueButton" type="Button" parent="MenuController/VictoryScreen"]
 layout_mode = 2
 text = "继续"
 
-[node name="MenuButton" type="Button" parent="VictoryScreen"]
+[node name="MenuButton" type="Button" parent="MenuController/VictoryScreen"]
 layout_mode = 2
 text = "返回主菜单"
 
-[connection signal="pressed" from="MainMenu/StartButton" to="." method="start_game"]
-[connection signal="pressed" from="MainMenu/QuitButton" to="." method="quit_game"]
-[connection signal="pressed" from="PauseMenu/ResumeButton" to="." method="resume_game"]
-[connection signal="pressed" from="PauseMenu/RestartButton" to="." method="restart_game"]
-[connection signal="pressed" from="GameOverScreen/RetryButton" to="." method="restart_game"]
-[connection signal="pressed" from="VictoryScreen/ContinueButton" to="." method="resume_game"]
+## HUD 系统层
+[node name="HUDController" type="CanvasLayer" parent="."]
+script = ExtResource("2")
+
+[node name="DriverHUD" type="Control" parent="HUDController"]
+visible = false
+
+[node name="ShooterHUD" type="Control" parent="HUDController"]
+visible = false
+
+[node name="WorldStateIndicator" type="Control" parent="HUDController"]
+visible = false
+
+[node name="CenterMessage" type="Label" parent="HUDController"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SplitDivider" type="ColorRect" parent="HUDController"]
+color = Color(0.2, 0.2, 0.2, 0.5)
+
+[connection signal="pressed" from="MenuController/MainMenu/StartButton" to="MenuController" method="start_game"]
+[connection signal="pressed" from="MenuController/MainMenu/QuitButton" to="MenuController" method="quit_game"]
+[connection signal="pressed" from="MenuController/PauseMenu/ResumeButton" to="MenuController" method="resume_game"]
+[connection signal="pressed" from="MenuController/PauseMenu/RestartButton" to="MenuController" method="restart_game"]
+[connection signal="pressed" from="MenuController/GameOverScreen/RetryButton" to="MenuController" method="restart_game"]
+[connection signal="pressed" from="MenuController/VictoryScreen/ContinueButton" to="MenuController" method="resume_game"]
