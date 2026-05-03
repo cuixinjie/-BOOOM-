@@ -1,0 +1,26 @@
+Godot Engine v4.6.2.stable.mono.official.71f334935 - https://godotengine.org
+OpenGL API 3.3.0 - Build 32.0.101.8247 - Compatibility - Using Device: Intel - Intel(R) Graphics
+
+[ConfigManager] All configs loaded
+[SaveManager] Initialized
+[ObjectPool] Initialized
+[DamageSystem] Initialized
+[EconomySystem] Initialized
+[ShopSystem] Initialized with 0 items
+[SpawnSystem] Initialized
+[SegmentGenerator] Initialized
+[SpecialSegmentManager] Initialized
+[RestPointManager] Initialized
+[HUDController] Initialized
+[Main] Ready
+[Main] Starting game
+[HUDController] HUD shown
+[GameManager] Game started
+[LevelManager] Initialized
+[SpawnSystem] Initialized
+[VehicleSkills] Registered skill: nitro
+[VehicleSkills] Registered skill: shield
+[VehicleSkills] Registered skill: repair
+[Motorcycle] Initialized — speed: 450.0 | health: 120.0
+[Main] Driver spawned and bound to vehicle
+[Main] Game world loaded

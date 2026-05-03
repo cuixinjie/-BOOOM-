@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkenm004"]
+
+[ext_resource type="Script" path="res://scripts/entities/enemy/DroneHealer.gd" id="1_dh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phys"]
+radius = 18.0
+
+[node name="DroneHealer" type="Node2D"]
+z_index = 10
+script = ExtResource("1_dh")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
+color = Color(0.2, 0.9, 0.4, 1)
+
+[node name="HealRing" type="Line2D" parent="."]
+points = PackedVector2Array(-22, 0, -16, 0, 0, -22, 16, 0, 22, 0, 0, 16, 0, 22, -22, 0)
+width = 1.5
+default_color = Color(0.3, 1.0, 0.5, 0.6)
+
+[node name="PropellerH" type="Line2D" parent="."]
+points = PackedVector2Array(-22, 0, 22, 0)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="PropellerV" type="Line2D" parent="."]
+points = PackedVector2Array(0, -22, 0, 22)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phys")
+
+[node name="HealAura" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3, 1.0, 0.5, 0.3)
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = -38.0
+offset_right = 25.0
+offset_bottom = -28.0
+grow_horizontal = 2
+max_value = 25.0
+value = 25.0

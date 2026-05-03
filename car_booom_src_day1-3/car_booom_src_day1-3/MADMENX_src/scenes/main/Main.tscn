@@ -1,0 +1,263 @@
+[gd_scene load_steps=13 format=3 uid="uid://bkmain001"]
+
+[ext_resource type="Script" path="res://scripts/main/Main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/autoload/EventBus.gd" id="1_ebus"]
+[ext_resource type="Script" path="res://scripts/autoload/GameManager.gd" id="2_gm"]
+[ext_resource type="Script" path="res://scripts/autoload/InputManager.gd" id="3_im"]
+[ext_resource type="Script" path="res://scripts/autoload/AudioManager.gd" id="4_am"]
+[ext_resource type="Script" path="res://scripts/autoload/ConfigManager.gd" id="5_cm"]
+[ext_resource type="Script" path="res://scripts/autoload/WorldStateManager.gd" id="6_wsm"]
+[ext_resource type="Script" path="res://scripts/autoload/ObjectPool.gd" id="7_op"]
+[ext_resource type="Script" path="res://scripts/autoload/DamageSystem.gd" id="8_ds"]
+[ext_resource type="Script" path="res://scripts/autoload/EconomySystem.gd" id="9_es"]
+[ext_resource type="Script" path="res://scripts/autoload/ShopSystem.gd" id="10_ss"]
+[ext_resource type="Script" path="res://scripts/autoload/SaveManager.gd" id="11_sm"]
+[ext_resource type="Script" path="res://scripts/ui/HUDController.gd" id="12_hc"]
+[ext_resource type="Script" path="res://scripts/ui/DriverHUD.gd" id="13_dh"]
+[ext_resource type="Script" path="res://scripts/ui/ShooterHUD.gd" id="14_sh"]
+[ext_resource type="Script" path="res://scripts/ui/UIComponents/WorldStateIndicator.gd" id="15_wsi"]
+[ext_resource type="Script" path="res://scripts/ui/UISignalDebugger.gd" id="16_usd"]
+[ext_resource type="Script" path="res://scripts/ui/ShopUI.gd" id="17_sui"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Menu" type="Control" parent="MenuLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="MenuLayer/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="MenuLayer/Menu/VBox"]
+layout_mode = 2
+text = "MADMEN"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="MenuLayer/Menu/VBox"]
+layout_mode = 2
+text = "START GAME"
+
+[node name="QuitButton" type="Button" parent="MenuLayer/Menu/VBox"]
+layout_mode = 2
+text = "QUIT"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+visible = false
+script = ExtResource("12_hc")
+
+[node name="DriverHUD" type="Control" parent="HUD"]
+script = ExtResource("13_dh")
+anchors_preset = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/DriverHUD"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+max_value = 120.0
+value = 120.0
+
+[node name="SpeedLabel" type="Label" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+text = "Speed: 0"
+
+[node name="NitroBar" type="ProgressBar" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="CoinLabel" type="Label" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+text = "Coins: 0"
+
+[node name="LevelLabel" type="Label" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+text = "Lv.1"
+
+[node name="ShopButton" type="Button" parent="HUD/DriverHUD/VBox"]
+layout_mode = 2
+text = "SHOP"
+
+[node name="ShooterHUD" type="Control" parent="HUD"]
+script = ExtResource("14_sh")
+anchors_preset = 1
+
+[node name="AmmoDisplay" type="Label" parent="HUD/ShooterHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_right = -10.0
+offset_top = 10.0
+offset_bottom = 30.0
+grow_horizontal = 0
+text = "30 / 90"
+horizontal_alignment = 2
+
+[node name="WorldStateIndicator" type="Control" parent="HUD"]
+script = ExtResource("15_wsi")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_right = 100.0
+offset_top = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="StateLabel" type="Label" parent="HUD/WorldStateIndicator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="HUD/WorldStateIndicator"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+
+[node name="UISignalDebugger" type="Control" parent="HUD"]
+script = ExtResource("16_usd")
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HUD/UISignalDebugger"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogContainer" type="VBoxContainer" parent="HUD/UISignalDebugger/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ShopUI" type="Control" parent="HUD"]
+visible = false
+script = ExtResource("17_sui")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="HUD/ShopUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="HUD/ShopUI/Panel"]
+layout_mode = 2
+
+[node name="ShopTitle" type="Label" parent="HUD/ShopUI/Panel/VBox"]
+layout_mode = 2
+text = "SHOP"
+horizontal_alignment = 1
+
+[node name="CoinLabel" type="Label" parent="HUD/ShopUI/Panel/VBox"]
+layout_mode = 2
+text = "Coins: 0"
+
+[node name="HSeparator" type="HSeparator" parent="HUD/ShopUI/Panel/VBox"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HUD/ShopUI/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ShopItems" type="VBoxContainer" parent="HUD/ShopUI/Panel/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CloseButton" type="Button" parent="HUD/ShopUI/Panel/VBox"]
+layout_mode = 2
+text = "CLOSE"
+
+[node name="PauseMenu" type="Control" parent="."]
+visible = false
+process_mode = 3
+
+[node name="Panel" type="PanelContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenu/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "RESUME"

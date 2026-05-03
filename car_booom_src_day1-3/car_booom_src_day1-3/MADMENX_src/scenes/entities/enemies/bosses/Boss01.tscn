@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkboss001"]
+
+[ext_resource type="Script" path="res://scripts/entities/enemy/BossBase.gd" id="1_bb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phys"]
+radius = 55.0
+
+[node name="Boss01" type="Node2D"]
+z_index = 15
+script = ExtResource("1_bb")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-50, -50, 50, -50, 50, 50, -50, 50)
+color = Color(0.6, 0.1, 0.1, 1)
+
+[node name="Core" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-25, -25, 25, -25, 25, 25, -25, 25)
+color = Color(0.9, 0.2, 0.2, 0.9)
+
+[node name="PropellerH" type="Line2D" parent="."]
+points = PackedVector2Array(-70, 0, 70, 0)
+width = 3.0
+default_color = Color(0.6, 0.6, 0.6, 0.8)
+
+[node name="PropellerV" type="Line2D" parent="."]
+points = PackedVector2Array(0, -70, 0, 70)
+width = 3.0
+default_color = Color(0.6, 0.6, 0.6, 0.8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phys")
+
+[node name="BossHealthBar" type="ProgressBar" parent="."]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -80.0
+offset_top = -100.0
+offset_right = 80.0
+offset_bottom = -80.0
+grow_horizontal = 2
+max_value = 500.0
+show_percentage = false
+
+[node name="ElbowEffect" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1.0, 0.5, 0.0, 0.5)
+
+[node name="StompEffect" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1.0, 0.0, 0.0, 0.4)

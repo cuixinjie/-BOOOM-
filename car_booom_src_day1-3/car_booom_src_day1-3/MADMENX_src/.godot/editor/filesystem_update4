@@ -1,0 +1,9 @@
+res://scripts/systems/economy/ShopSystem.gd
+res://scripts/systems/level/RestPointManager.gd
+res://scripts/systems/level/RoadVisualizer.gd
+res://scripts/systems/level/SegmentGenerator.gd
+res://scripts/main/Main.gd
+res://scripts/systems/level/LevelManager.gd
+res://scripts/entities/enemy/DroneBasic.gd
+res://scripts/systems/chase/BreakdownRecovery.gd
+res://scripts/ui/ShopUI.gd

@@ -1,0 +1,104 @@
+{
+  "_comment": "商店商品配置 - 合并版",
+  "_version": "1.0",
+  "_merged_date": "2026-05-02",
+  "_contributors": ["新街", "cjs"],
+
+  "shop_items": [
+    {
+      "id": "weapon_pistol_rapid",
+      "name": "速射手枪",
+      "description": "射速更快的手枪",
+      "price": 500,
+      "type": "weapon",
+      "unlocks": "pistol_rapid",
+      "tier": 1
+    },
+    {
+      "id": "weapon_shotgun",
+      "name": "霰弹枪",
+      "description": "近距离高伤害散射武器",
+      "price": 800,
+      "type": "weapon",
+      "unlocks": "shotgun",
+      "tier": 1
+    },
+    {
+      "id": "weapon_smg",
+      "name": "冲锋枪",
+      "description": "超高射速持续输出",
+      "price": 1200,
+      "type": "weapon",
+      "unlocks": "smg",
+      "tier": 2
+    },
+    {
+      "id": "weapon_rifle",
+      "name": "狙击步枪",
+      "description": "高伤害穿透武器",
+      "price": 2000,
+      "type": "weapon",
+      "unlocks": "rifle",
+      "tier": 3
+    },
+    {
+      "id": "weapon_laser",
+      "name": "激光枪",
+      "description": "中等伤害稳定射速",
+      "price": 1500,
+      "type": "weapon",
+      "unlocks": "laser",
+      "tier": 2
+    },
+    {
+      "id": "health_upgrade",
+      "name": "护甲强化",
+      "description": "最大生命值+20",
+      "price": 300,
+      "type": "upgrade",
+      "effect": {"max_health": 20},
+      "tier": 1
+    },
+    {
+      "id": "speed_upgrade",
+      "name": "引擎升级",
+      "description": "最大速度+10%",
+      "price": 400,
+      "type": "upgrade",
+      "effect": {"max_speed": 0.1},
+      "tier": 1
+    },
+    {
+      "id": "nitro_upgrade",
+      "name": "氮气罐扩容",
+      "description": "氮气容量+30%",
+      "price": 350,
+      "type": "upgrade",
+      "effect": {"nitro_capacity": 0.3},
+      "tier": 1
+    },
+    {
+      "id": "coin_boost",
+      "name": "幸运金币",
+      "description": "金币获取量+20%",
+      "price": 600,
+      "type": "buff",
+      "effect": {"coin_multiplier": 0.2},
+      "tier": 2
+    },
+    {
+      "id": "skill_nitro_plus",
+      "name": "氮气强化",
+      "description": "氮气冲刺速度+25%",
+      "price": 700,
+      "type": "skill_upgrade",
+      "tier": 2
+    }
+  ],
+
+  "rest_point_rewards": {
+    "coin_bonus": 50,
+    "health_restore_ratio": 0.5,
+    "skill_reset": true
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "_comment": "关卡配置 - 合并版",
+  "_version": "1.0",
+  "_merged_date": "2026-05-02",
+  "_contributors": ["新街"],
+
+  "global_settings": {
+    "default_road_width": 480,
+    "default_enemy_count": 5,
+    "default_obstacle_density": "normal"
+  },
+
+  "Level01": {
+    "name": "废土公路",
+    "total_segments": 10,
+    "starting_enemies": 3,
+    "enemy_types": ["drone_basic"],
+    "difficulty_curve": [1.0, 1.2, 1.5],
+    "has_boss": false,
+    "has_rest_point": true,
+    "special_events": ["road_narrow", "fog"],
+    "description": "新手关卡，敌人强度较低"
+  },
+
+  "Level02": {
+    "name": "燃烧都市",
+    "total_segments": 15,
+    "starting_enemies": 5,
+    "enemy_types": ["drone_basic", "drone_laser"],
+    "difficulty_curve": [1.2, 1.5, 1.8, 2.0],
+    "has_boss": true,
+    "has_rest_point": true,
+    "special_events": ["fog", "emp", "traffic_jam"],
+    "boss_type": "boss_drone_commander",
+    "description": "引入激光敌人和BOSS"
+  },
+
+  "Level03": {
+    "name": "地狱公路",
+    "total_segments": 20,
+    "starting_enemies": 8,
+    "enemy_types": ["drone_basic", "drone_laser", "drone_healer", "enemy_bike"],
+    "difficulty_curve": [1.5, 2.0, 2.5, 3.0],
+    "has_boss": true,
+    "has_rest_point": false,
+    "special_events": ["road_narrow", "fog", "emp", "traffic_jam"],
+    "boss_type": "boss_drone_commander",
+    "description": "高难度关卡，所有敌人类型"
+  },
+
+  "segment_types": {
+    "normal": {
+      "enemies": 5,
+      "obstacles": 3,
+      "duration": 15,
+      "enemy_speed_modifier": 1.0
+    },
+    "dense": {
+      "enemies": 10,
+      "obstacles": 6,
+      "duration": 20,
+      "enemy_speed_modifier": 1.1
+    },
+    "sparse": {
+      "enemies": 2,
+      "obstacles": 1,
+      "duration": 10,
+      "enemy_speed_modifier": 0.9
+    },
+    "boss_approach": {
+      "enemies": 8,
+      "obstacles": 4,
+      "duration": 30,
+      "enemy_speed_modifier": 1.2
+    }
+  },
+
+  "special_events": {
+    "road_narrow": {
+      "duration": 15,
+      "road_width_modifier": 0.5,
+      "description": "道路变窄"
+    },
+    "fog": {
+      "duration": 20,
+      "visibility_reduction": 0.7,
+      "description": "大雾天气"
+    },
+    "emp": {
+      "duration": 10,
+      "description": "电磁干扰，敌人暂时瘫痪"
+    },
+    "traffic_jam": {
+      "duration": 12,
+      "obstacle_multiplier": 2.0,
+      "description": "交通堵塞，障碍物增多"
+    }
+  }
+}

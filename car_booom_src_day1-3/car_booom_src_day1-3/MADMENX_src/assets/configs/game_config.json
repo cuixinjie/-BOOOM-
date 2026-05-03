@@ -1,0 +1,89 @@
+{
+  "_comment": "游戏通用配置 - 合并版",
+  "_version": "1.0",
+  "_merged_date": "2026-05-02",
+  "_contributors": ["新街", "cjs"],
+
+  "vehicle": {
+    "max_health": 120,
+    "base_speed": 300,
+    "max_speed": 450,
+    "acceleration": 350,
+    "deceleration": 250,
+    "nitro_max": 100,
+    "nitro_consumption": 20,
+    "dodge_cooldown": 2.0,
+    "breakdown_threshold": 0.0
+  },
+
+  "player": {
+    "driver": {
+      "max_health": 100,
+      "move_speed": 200,
+      "dodge_speed": 600,
+      "dodge_duration": 0.3
+    },
+    "shooter": {
+      "max_health": 80,
+      "move_speed": 150
+    }
+  },
+
+  "skills": {
+    "nitro": {
+      "name": "氮气冲刺",
+      "cooldown": 10,
+      "duration": 3,
+      "speed_multiplier": 1.5,
+      "description": "短时间内大幅提升速度"
+    },
+    "shield": {
+      "name": "护盾",
+      "cooldown": 30,
+      "duration": 5,
+      "description": "生成临时护盾抵挡伤害"
+    },
+    "repair": {
+      "name": "紧急维修",
+      "cooldown": 45,
+      "heal_amount": 60,
+      "description": "紧急修复载具"
+    },
+    "EMP": {
+      "name": "电磁脉冲",
+      "cooldown": 60,
+      "duration": 10,
+      "description": "瘫痪所有敌人"
+    }
+  },
+
+  "world_swap": {
+    "auto_swap_interval": 30,
+    "warning_duration": 2,
+    "inverted_pitch": 0.8
+  },
+
+  "chase": {
+    "initial_distance": 1200,
+    "min_safe_distance": 200,
+    "chase_speed": 80,
+    "rest_point_distance_bonus": 400
+  },
+
+  "breakdown_recovery": {
+    "repair_time": 8,
+    "success_threshold": 100,
+    "failure_threshold": -30,
+    "progress_per_correct": 15,
+    "decay_per_second": 5,
+    "penalty_per_wrong": 7.5,
+    "button_sequence": ["Q", "W", "E", "R"]
+  },
+
+  "economy": {
+    "starting_coins": 200,
+    "coin_value": 1,
+    "energy_per_level": 100,
+    "score_per_kill_multiplier": 1.0
+  }
+}

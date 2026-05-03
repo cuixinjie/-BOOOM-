@@ -1,0 +1,98 @@
+{
+  "_comment": "武器属性配置 - 合并版",
+  "_version": "1.0",
+  "_merged_date": "2026-05-02",
+  "_contributors": ["新街", "池言いく", "cjs"],
+
+  "pistol_basic": {
+    "id": "pistol_basic",
+    "name": "普通手枪",
+    "type": "pistol",
+    "damage": 10,
+    "fire_rate": 0.15,
+    "magazine_size": 30,
+    "reload_speed": 2.0,
+    "bullet_speed": 500,
+    "bullet_type": "player_basic",
+    "sound_type": "pistol",
+    "piercing": 0,
+    "description": "基础武器，稳定性好"
+  },
+
+  "pistol_rapid": {
+    "id": "pistol_rapid",
+    "name": "速射手枪",
+    "type": "pistol",
+    "damage": 7,
+    "fire_rate": 0.08,
+    "magazine_size": 45,
+    "reload_speed": 2.5,
+    "bullet_speed": 450,
+    "bullet_type": "player_basic",
+    "sound_type": "rapid",
+    "piercing": 0,
+    "description": "射速快，伤害较低"
+  },
+
+  "shotgun": {
+    "id": "shotgun",
+    "name": "霰弹枪",
+    "type": "shotgun",
+    "damage": 8,
+    "fire_rate": 0.8,
+    "magazine_size": 6,
+    "reload_speed": 3.0,
+    "bullet_speed": 400,
+    "bullet_type": "player_basic",
+    "sound_type": "shotgun",
+    "piercing": 0,
+    "pellets": 5,
+    "spread": 0.3,
+    "description": "近距离高伤害，散射"
+  },
+
+  "smg": {
+    "id": "smg",
+    "name": "冲锋枪",
+    "type": "smg",
+    "damage": 6,
+    "fire_rate": 0.05,
+    "magazine_size": 60,
+    "reload_speed": 2.2,
+    "bullet_speed": 480,
+    "bullet_type": "player_basic",
+    "sound_type": "smg",
+    "piercing": 0,
+    "description": "超高射速，持续输出"
+  },
+
+  "rifle": {
+    "id": "rifle",
+    "name": "狙击步枪",
+    "type": "rifle",
+    "damage": 50,
+    "fire_rate": 1.5,
+    "magazine_size": 5,
+    "reload_speed": 3.5,
+    "bullet_speed": 800,
+    "bullet_type": "player_basic",
+    "sound_type": "rifle",
+    "piercing": 1,
+    "description": "高伤害，穿透一发"
+  },
+
+  "laser": {
+    "id": "laser",
+    "name": "激光枪",
+    "type": "laser",
+    "damage": 15,
+    "fire_rate": 0.1,
+    "magazine_size": 100,
+    "reload_speed": 4.0,
+    "bullet_speed": 700,
+    "bullet_type": "player_basic",
+    "sound_type": "laser",
+    "piercing": 0,
+    "description": "中等伤害，射速稳定"
+  }
+}

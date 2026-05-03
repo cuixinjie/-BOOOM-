@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bklvl002"]
+
+[ext_resource type="Script" path="res://scripts/systems/level/LevelManager.gd" id="1_lm"]
+[ext_resource type="Script" path="res://scripts/systems/level/RoadVisualizer.gd" id="2_rv"]
+
+[node name="Level02" type="Node2D"]
+
+[node name="LevelManager" type="Node" parent="."]
+script = ExtResource("1_lm")
+
+[node name="RoadVisualizer" type="Node2D" parent="."]
+script = ExtResource("2_rv")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.08, 1)
+
+[node name="VehicleSpawn" type="Marker2D" parent="."]
+position = Vector2(200, 540)

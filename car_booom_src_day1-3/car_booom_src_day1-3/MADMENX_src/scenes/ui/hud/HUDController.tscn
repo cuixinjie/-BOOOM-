@@ -1,0 +1,126 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkhud001"]
+
+[ext_resource type="Script" path="res://scripts/ui/HUDController.gd" id="1_hc"]
+
+[node name="HUDController" type="CanvasLayer"]
+script = ExtResource("1_hc")
+
+[node name="DriverHUD" type="Control" parent="."]
+anchors_preset = 2
+anchor_bottom = 1.0
+offset_right = 300.0
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="DriverHUD"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HealthBar" type="ProgressBar" parent="DriverHUD/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="SpeedLabel" type="Label" parent="DriverHUD/VBox"]
+layout_mode = 2
+text = "Speed: 0"
+
+[node name="NitroBar" type="ProgressBar" parent="DriverHUD/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="CoinLabel" type="Label" parent="DriverHUD/VBox"]
+layout_mode = 2
+text = "Coins: 0"
+
+[node name="LevelLabel" type="Label" parent="DriverHUD/VBox"]
+layout_mode = 2
+text = "Lv.1"
+
+[node name="ShooterHUD" type="Control" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+grow_horizontal = 0
+
+[node name="AmmoDisplay" type="Label" parent="ShooterHUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_right = -10.0
+offset_top = 10.0
+offset_bottom = 30.0
+grow_horizontal = 0
+text = "30 / 90"
+horizontal_alignment = 2
+
+[node name="Crosshair" type="CircleShape2D" parent="ShooterHUD"]
+position = Vector2(100, 100)
+
+[node name="WorldStateIndicator" type="Control" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_right = 100.0
+offset_top = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="StateLabel" type="Label" parent="WorldStateIndicator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="WorldStateIndicator"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 10.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="WorldStateIndicator"]
+
+[node name="UISignalDebugger" type="Control" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UISignalDebugger"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LogContainer" type="VBoxContainer" parent="UISignalDebugger/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

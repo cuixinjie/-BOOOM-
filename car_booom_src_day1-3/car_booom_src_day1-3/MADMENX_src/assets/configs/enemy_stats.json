@@ -1,0 +1,96 @@
+{
+  "_comment": "敌人属性配置 - 合并版",
+  "_version": "1.0",
+  "_merged_date": "2026-05-02",
+  "_contributors": ["长安旧梦", "新街"],
+
+  "drone_basic": {
+    "id": "drone_basic",
+    "name": "基础无人机",
+    "type": "aerial",
+    "max_health": 30,
+    "damage": 8,
+    "move_speed": 80,
+    "chase_range": 350,
+    "attack_range": 250,
+    "attack_cooldown": 2.0,
+    "bullet_type": "enemy_basic",
+    "score_value": 10,
+    "coin_drop": [1, 5],
+    "energy_drop": [0, 2],
+    "behavior": "chase_and_shoot",
+    "description": "最基础的敌人"
+  },
+
+  "drone_laser": {
+    "id": "drone_laser",
+    "name": "激光无人机",
+    "type": "aerial",
+    "max_health": 20,
+    "damage": 20,
+    "move_speed": 60,
+    "chase_range": 400,
+    "attack_range": 300,
+    "attack_cooldown": 3.0,
+    "bullet_type": "enemy_laser",
+    "charge_time": 1.5,
+    "score_value": 20,
+    "coin_drop": [2, 8],
+    "energy_drop": [1, 3],
+    "behavior": "charge_and_laser",
+    "description": "高伤害激光攻击"
+  },
+
+  "drone_healer": {
+    "id": "drone_healer",
+    "name": "治疗无人机",
+    "type": "support",
+    "max_health": 25,
+    "damage": 0,
+    "move_speed": 50,
+    "chase_range": 300,
+    "heal_range": 150,
+    "heal_amount": 10,
+    "heal_cooldown": 5.0,
+    "score_value": 15,
+    "coin_drop": [1, 3],
+    "energy_drop": [2, 5],
+    "behavior": "support_and_heal",
+    "description": "为其他敌人治疗"
+  },
+
+  "enemy_bike": {
+    "id": "enemy_bike",
+    "name": "对冲摩托",
+    "type": "ground",
+    "max_health": 50,
+    "damage": 25,
+    "move_speed": 150,
+    "chase_range": 600,
+    "charge_speed": 500,
+    "charge_cooldown": 4.0,
+    "score_value": 25,
+    "coin_drop": [3, 8],
+    "energy_drop": [1, 4],
+    "behavior": "charge_attack",
+    "description": "高速冲向玩家"
+  },
+
+  "boss_drone_commander": {
+    "id": "boss_drone_commander",
+    "name": "无人机指挥官",
+    "type": "boss",
+    "max_health": 500,
+    "damage": 15,
+    "move_speed": 60,
+    "phases": 3,
+    "phase_thresholds": [0.66, 0.33],
+    "summon_cooldown": 10,
+    "enraged_threshold": 0.3,
+    "score_value": 500,
+    "coin_drop": [30, 50],
+    "energy_drop": [10, 20],
+    "behavior": "multi_phase_summoner",
+    "description": "BOSS：多阶段，召唤小兵"
+  }
+}

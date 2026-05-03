@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkenm001"]
+
+[ext_resource type="Script" path="res://scripts/entities/enemy/DroneBasic.gd" id="2_db"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phys"]
+radius = 18.0
+
+[node name="DroneBasic" type="Node2D"]
+z_index = 10
+script = ExtResource("2_db")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-14, -14, 14, -14, 14, 14, -14, 14)
+color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="PropellerH" type="Line2D" parent="."]
+points = PackedVector2Array(-22, 0, 22, 0)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="PropellerV" type="Line2D" parent="."]
+points = PackedVector2Array(0, -22, 0, 22)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phys")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_top = -38.0
+offset_right = 25.0
+offset_bottom = -28.0
+grow_horizontal = 2
+max_value = 30.0
+value = 30.0

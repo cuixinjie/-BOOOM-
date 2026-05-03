@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkplay002"]
+
+[ext_resource type="Script" path="res://scripts/entities/player/Shooter.gd" id="1_sh"]
+
+[node name="Shooter" type="Node2D"]
+script = ExtResource("1_sh")
+
+[node name="AimMarker" type="Marker2D" parent="."]
+position = Vector2(40, 0)

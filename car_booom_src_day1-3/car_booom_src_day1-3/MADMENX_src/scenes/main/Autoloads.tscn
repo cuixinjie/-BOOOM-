@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkmain001"]
+
+[ext_resource type="Script" path="res://scripts/autoload/EventBus.gd" id="1_ebus"]
+[ext_resource type="Script" path="res://scripts/autoload/GameManager.gd" id="2_gm"]
+[ext_resource type="Script" path="res://scripts/autoload/InputManager.gd" id="3_im"]
+[ext_resource type="Script" path="res://scripts/autoload/AudioManager.gd" id="4_am"]
+[ext_resource type="Script" path="res://scripts/autoload/ConfigManager.gd" id="5_cm"]
+[ext_resource type="Script" path="res://scripts/autoload/SaveManager.gd" id="6_sm"]
+[ext_resource type="Script" path="res://scripts/autoload/WorldStateManager.gd" id="7_wsm"]
+
+[node name="EventBus" type="Node"]
+script = ExtResource("1_ebus")
+
+[node name="GameManager" type="Node"]
+script = ExtResource("2_gm")
+
+[node name="InputManager" type="Node"]
+script = ExtResource("3_im")
+
+[node name="AudioManager" type="Node"]
+process_mode = 3
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+volume_db = -20.0
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="AudioManager"]
+volume_db = -20.0
+script = ExtResource("4_am")
+
+[node name="ConfigManager" type="Node"]
+script = ExtResource("5_cm")
+
+[node name="SaveManager" type="Node"]
+script = ExtResource("6_sm")
+
+[node name="WorldStateManager" type="Node"]
+script = ExtResource("7_wsm")

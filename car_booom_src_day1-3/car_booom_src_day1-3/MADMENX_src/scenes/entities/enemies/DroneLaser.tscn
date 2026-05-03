@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkenm003"]
+
+[ext_resource type="Script" path="res://scripts/entities/enemy/DroneLaser.gd" id="1_dl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phys"]
+radius = 22.0
+
+[node name="DroneLaser" type="Node2D"]
+z_index = 10
+script = ExtResource("1_dl")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-20, -20, 20, -20, 20, 20, -20, 20)
+color = Color(0.9, 0.5, 0.1, 1)
+
+[node name="LaserCore" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+color = Color(1.0, 0.3, 0.0, 0.8)
+
+[node name="PropellerH" type="Line2D" parent="."]
+points = PackedVector2Array(-28, 0, 28, 0)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="PropellerV" type="Line2D" parent="."]
+points = PackedVector2Array(0, -28, 0, 28)
+width = 2.0
+default_color = Color(0.7, 0.7, 0.7, 0.8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phys")
+
+[node name="LaserChargeEffect" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1.0, 0.3, 0.0, 0.7)
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.0
+offset_top = -48.0
+offset_right = 30.0
+offset_bottom = -38.0
+grow_horizontal = 2
+max_value = 20.0
+value = 20.0
