@@ -1,9 +1,7 @@
-res://scripts/systems/economy/ShopSystem.gd
-res://scripts/systems/level/RestPointManager.gd
-res://scripts/systems/level/RoadVisualizer.gd
-res://scripts/systems/level/SegmentGenerator.gd
-res://scripts/main/Main.gd
-res://scripts/systems/level/LevelManager.gd
-res://scripts/entities/enemy/DroneBasic.gd
-res://scripts/systems/chase/BreakdownRecovery.gd
-res://scripts/ui/ShopUI.gd
+res://scripts/core/DamageSystem.gd
+res://scripts/entities/bullet/BulletBase.gd
+res://scripts/entities/bullet/BulletFactory.gd
+res://scripts/entities/enemy/BossBase.gd
+res://scripts/entities/enemy/EnemyBase.gd
+res://scripts/entities/enemy/EnemyBike.gd
+res://scripts/systems/level/SpawnSystem.gd

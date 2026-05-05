@@ -150,3 +150,23 @@ func calculate_dot_damage(base_dps: float, duration: float, tick_rate: float) ->
 		result.append(damage_per_tick)
 
 	return result
+
+
+## 爆炸溅射（主目标可排除，避免与直击叠加双重满额）
+func apply_explosion_aoe(center: Vector2, radius: float, damage_amount: float, source: Node, exclude: Node = null, dmg_type: String = "explosion") -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return
+	var amount: float = maxf(0.0, damage_amount)
+	if amount <= 0.0:
+		return
+	for node in tree.get_nodes_in_group("enemies"):
+		if not is_instance_valid(node):
+			continue
+		if exclude != null and node == exclude:
+			continue
+		if not node.has_method("take_damage"):
+			continue
+		if "global_position" in node and node.global_position.distance_to(center) > radius:
+			continue
+		apply_damage(node, DamageInfo.new(source, amount, dmg_type))

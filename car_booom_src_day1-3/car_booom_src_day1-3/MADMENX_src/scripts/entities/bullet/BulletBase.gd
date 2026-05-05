@@ -33,11 +33,24 @@ var lifetime_timer: float = 0.0
 
 var _pool_name: String = ""
 
-# 可被穿透子弹覆盖
+# 可被穿透子弹覆盖（穿透 N 表示额外贯穿 N 个目标，共命中 N+1 次）
 var piercing_count: int = 0
-var current_pierce: int = 0
+var hits_landed: int = 0
+var speed_mult_after_pierce: float = 1.0
 var collision_radius: float = 8.0
 var _collision_hit_targets: Array = []
+
+# 弹药特效（由 BulletFactory.apply_ammo_effect 写入）
+var explosion_radius: float = 0.0
+var explosion_damage_ratio: float = 0.0
+var poison_max_hp_pct: float = 0.0
+var poison_duration: float = 0.0
+var poison_stack_cap: int = 3
+var emp_duration: float = 0.0
+var submunition_split_delay: float = -1.0
+var submunition_count: int = 0
+var submunition_damage_scale: float = 1.0
+var submunition_angle_deg: float = 15.0
 
 # ===== 接口定义 =====
 ## fire(dir: Vector2, spd: float, dmg: float, owner: int, pierce: int = 0) -> void
@@ -56,6 +69,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not is_active:
 		return
+
+	if submunition_split_delay >= 0.0:
+		submunition_split_delay -= delta
+		if submunition_split_delay <= 0.0:
+			submunition_split_delay = -1.0
+			_spawn_submunitions()
 
 	var movement = bullet_direction * bullet_speed * delta
 	global_position += movement
@@ -81,14 +100,20 @@ func fire(dir: Vector2, spd: float, dmg: float, blt_owner: int = 0, pierce: int 
 	lifetime_timer = lifetime
 	distance_traveled = 0.0
 	visible = true
+	hits_landed = 0
 	if spawn_pos != Vector2.ZERO:
 		global_position = spawn_pos
 	set_process(true)
 
-	# 穿透相关
-	if pierce > 0:
-		piercing_count = pierce
-		current_pierce = 0
+	piercing_count = maxi(0, pierce)
+	speed_mult_after_pierce = 1.0
+	explosion_radius = 0.0
+	explosion_damage_ratio = 0.0
+	poison_max_hp_pct = 0.0
+	poison_duration = 0.0
+	emp_duration = 0.0
+	submunition_split_delay = -1.0
+	submunition_count = 0
 
 	_collision_hit_targets.clear()
 
@@ -101,8 +126,10 @@ func on_spawned() -> void:
 	distance_traveled = 0.0
 	visible = false
 	set_process(false)
-	current_pierce = 0
+	hits_landed = 0
+	piercing_count = 0
 	_collision_hit_targets.clear()
+	submunition_split_delay = -1.0
 
 func on_despawned() -> void:
 	is_active = false
@@ -137,8 +164,7 @@ func _check_manual_collision() -> void:
 			_collision_hit_targets.append(target)
 			_on_hit(target)
 			bullet_hit_target.emit(target)
-			if piercing_count > 0 and current_pierce >= piercing_count:
-				expire()
+			if not is_active:
 				return
 
 func _should_hit(target: Node) -> bool:
@@ -160,15 +186,44 @@ func _should_hit(target: Node) -> bool:
 			return target.has_method("take_damage")
 
 func _on_hit(target: Node) -> void:
-	# 如果有穿透能力且未穿透完，则不造成伤害
-	if piercing_count > 0 and current_pierce < piercing_count:
-		current_pierce += 1
-		AudioManager.play_hit_sound()
+	if not is_active:
 		return
 
-	var damage_info = DamageSystem.DamageInfo.new(self, damage, damage_type)
+	var damage_info := DamageSystem.DamageInfo.new(self, damage, damage_type)
 	DamageSystem.apply_damage(target, damage_info)
-	expire()
+	AudioManager.play_hit_sound()
+
+	if explosion_radius > 0.0 and explosion_damage_ratio > 0.0:
+		DamageSystem.apply_explosion_aoe(global_position, explosion_radius, damage * explosion_damage_ratio, self, target)
+
+	if poison_max_hp_pct > 0.0 and poison_duration > 0.0 and target.has_method("apply_poison_stack"):
+		target.call("apply_poison_stack", poison_max_hp_pct, poison_duration, poison_stack_cap)
+
+	if emp_duration > 0.0 and target.has_method("apply_stun"):
+		target.call("apply_stun", emp_duration)
+
+	hits_landed += 1
+	var max_hits := 1
+	if piercing_count > 0:
+		max_hits = piercing_count + 1
+	bullet_speed *= speed_mult_after_pierce
+	if hits_landed >= max_hits:
+		expire()
+
+
+func _spawn_submunitions() -> void:
+	if bullet_owner != 0 or submunition_count <= 0:
+		return
+	var fac := BulletFactory
+	if fac == null or not fac.has_method("create_player_bullet"):
+		return
+	var base_angle := rad_to_deg(bullet_direction.angle())
+	for i in submunition_count:
+		var off := (float(i) - float(submunition_count - 1) * 0.5) * submunition_angle_deg
+		var ang := deg_to_rad(base_angle + off)
+		var dir := Vector2.from_angle(ang)
+		var child_dmg := damage * submunition_damage_scale
+		fac.create_player_bullet("player_basic", dir, child_dmg, 0, global_position, {"skip_submunition_clone": true})
 
 func expire() -> void:
 	if not is_active:

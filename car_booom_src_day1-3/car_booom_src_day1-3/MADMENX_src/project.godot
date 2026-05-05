@@ -49,6 +49,10 @@ window/stretch/mode="viewport"
 
 project/assembly_name="MADMEN"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+
 [input]
 
 move_up={

@@ -24,6 +24,11 @@ var _spawn_timer: float = 0.0
 var _is_spawning: bool = false
 var _spawn_enabled: bool = false
 
+var _segment_progress_id: int = 0
+var _ambient_spawn_timer: float = 0.0
+var _ambient_active: bool = false
+var _manual_difficulty_progress: float = -1.0
+
 # ===== 接口定义 =====
 ## spawn_enemy(enemy_type: String, position: Vector2 = Vector2.ZERO) -> Node
 ##   生成敌人
@@ -36,6 +41,9 @@ var _spawn_enabled: bool = false
 ##
 ## get_active_enemy_count() -> int
 ##   获取当前存活敌人数量
+##
+## set_difficulty_curve(progress: float) -> void
+##   手动覆盖难度曲线进度 [0,1]（可选，默认按路段推算）
 ## ===== 接口结束 =====
 
 func _ready() -> void:
@@ -63,16 +71,26 @@ func _check_pools_ready() -> Dictionary:
 func _on_level_start(level_id: String) -> void:
 	_spawn_enabled = true
 	_spawn_timer = 0.0  # 立即开始生成
+	_segment_progress_id = 0
+	_manual_difficulty_progress = -1.0
+	_ambient_active = bool(_spawn_meta().get("ambient_spawn_enabled", true))
+	_ambient_spawn_timer = _next_ambient_interval()
 	print("[SpawnSystem] Spawning enabled for level: ", level_id, " | Pool status: ", _check_pools_ready())
 
 func _on_segment_changed(segment_id: int) -> void:
 	print("[SpawnSystem] Segment changed to: ", segment_id)
-	# 路段变化后重新启用敌人生成
+	_segment_progress_id = maxi(_segment_progress_id, segment_id)
 	_spawn_enabled = true
 
 func _process(delta: float) -> void:
 	if not _spawn_enabled:
 		return
+
+	if _ambient_active:
+		_ambient_spawn_timer -= delta
+		if _ambient_spawn_timer <= 0.0:
+			_try_spawn_ambient_patrol()
+			_ambient_spawn_timer = _next_ambient_interval()
 
 	if not _is_spawning:
 		return
@@ -81,6 +99,67 @@ func _process(delta: float) -> void:
 		_process_spawn_queue()
 	elif _spawn_timer > 0:
 		_spawn_timer -= delta
+
+
+func set_difficulty_curve(progress: float) -> void:
+	_manual_difficulty_progress = clampf(progress, 0.0, 1.0)
+
+
+func _spawn_meta() -> Dictionary:
+	var meta: Dictionary = ConfigMgr.get_enemy_stats("spawn_meta")
+	return meta
+
+
+func _difficulty_progress() -> float:
+	if _manual_difficulty_progress >= 0.0:
+		return _manual_difficulty_progress
+	var meta: Dictionary = _spawn_meta()
+	var mx: float = float(meta.get("progress_max_segment", 12))
+	if mx <= 0.0:
+		return 0.0
+	return clampf(float(_segment_progress_id) / mx, 0.0, 1.0)
+
+
+func _next_ambient_interval() -> float:
+	var meta: Dictionary = _spawn_meta()
+	var p: float = _difficulty_progress()
+	var hi: float = float(meta.get("interval_max", 7.5))
+	var lo: float = float(meta.get("interval_min", 2.1))
+	var base: float = lerpf(hi, lo, p)
+	var varc: float = float(meta.get("interval_variance", 0.35))
+	return base * randf_range(1.0 - varc, 1.0 + varc)
+
+
+func _tier_pool_for_progress() -> Array:
+	var meta: Dictionary = _spawn_meta()
+	var p: float = _difficulty_progress()
+	var early: float = float(meta.get("tier_unlock_early", 0.34))
+	var mid: float = float(meta.get("tier_unlock_mid", 0.67))
+	var pool: Array = []
+	var t1: Array = meta.get("tier_1_types", ["drone_basic"]) as Array
+	for x in t1:
+		pool.append(x)
+	if p >= early:
+		for x in meta.get("tier_2_types", []) as Array:
+			pool.append(x)
+	if p >= mid:
+		for x in meta.get("tier_3_types", []) as Array:
+			pool.append(x)
+	return pool
+
+
+func _try_spawn_ambient_patrol() -> void:
+	var meta: Dictionary = _spawn_meta()
+	if not meta.get("ambient_spawn_enabled", true):
+		return
+	var cap: int = int(meta.get("max_alive_cap", 22))
+	if get_active_enemy_count() >= cap:
+		return
+	var pool: Array = _tier_pool_for_progress()
+	if pool.is_empty():
+		pool = ["drone_basic"]
+	var enemy_type: String = String(pool[randi() % pool.size()])
+	spawn_enemy(enemy_type, Vector2.ZERO)
 
 func _process_spawn_queue() -> void:
 	if _spawn_queue.is_empty():
@@ -222,30 +301,30 @@ func get_active_enemies() -> Array:
 
 func _on_segment_content_ready(segment_id: int, obstacle_density: String) -> void:
 	print("[SpawnSystem] Segment ", segment_id, " ready, density: ", obstacle_density)
-	# 根据难度生成对应波次的敌人
-	var enemy_count = _get_enemy_count_for_density(obstacle_density)
-	var enemy_types = _get_enemy_types_for_segment(segment_id)
+	_segment_progress_id = maxi(_segment_progress_id, segment_id)
+	var enemy_count: int = _get_enemy_count_for_density(obstacle_density)
+	var enemy_types: Array = _get_enemy_types_for_segment(segment_id)
 	if enemy_count > 0:
 		spawn_wave(enemy_types, enemy_count)
 
 func _get_enemy_count_for_density(density: String) -> int:
+	var base: int = 3
 	match density:
-		"sparse": return 2
-		"normal": return 5
-		"dense": return 8
-		"boss_approach": return 5
-	return 3
+		"sparse":
+			base = 2
+		"normal":
+			base = 5
+		"dense":
+			base = 8
+		"boss_approach":
+			base = 5
+	var bonus: int = int(round(_difficulty_progress() * 4.0))
+	return base + bonus
 
 func _get_enemy_types_for_segment(segment_id: int) -> Array:
-	# 根据路段进度逐渐增加敌人类型
-	if segment_id < 3:
-		return ["drone_basic"]
-	elif segment_id < 6:
-		return ["drone_basic", "drone_basic"]
-	elif segment_id < 10:
-		return ["drone_basic", "drone_basic", "drone_laser"]
-	else:
-		return ["drone_basic", "drone_laser", "drone_healer"]
+	_segment_progress_id = maxi(_segment_progress_id, segment_id)
+	var pool: Array = _tier_pool_for_progress()
+	return pool if pool.size() > 0 else ["drone_basic"]
 
 func _on_boss_requested(boss_type: String) -> void:
 	spawn_enemy(boss_type, _get_spawn_position())

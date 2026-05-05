@@ -94,5 +94,103 @@
     "sound_type": "laser",
     "piercing": 0,
     "description": "中等伤害，射速稳定"
+  },
+
+  "ammo_standard": {
+    "id": "ammo_standard",
+    "name": "标准弹药",
+    "damage_multiplier": 1.0,
+    "emp_interval": 0,
+    "allowed_weapon_types": ["pistol", "smg", "shotgun", "rifle", "laser"]
+  },
+
+  "ammo_armor_piercing": {
+    "id": "ammo_armor_piercing",
+    "name": "穿甲弹",
+    "damage_multiplier": 1.1,
+    "extra_pierce": 1,
+    "speed_mult_after_pierce": 0.8,
+    "emp_interval": 0,
+    "allowed_weapon_types": ["pistol", "smg", "shotgun", "rifle", "laser"]
+  },
+
+  "ammo_explosive": {
+    "id": "ammo_explosive",
+    "name": "爆炸弹",
+    "damage_multiplier": 0.8,
+    "explosion_radius": 72,
+    "explosion_damage_multiplier": 0.5,
+    "emp_interval": 0,
+    "allowed_weapon_types": ["pistol", "smg", "shotgun", "rifle", "laser"]
+  },
+
+  "ammo_poison": {
+    "id": "ammo_poison",
+    "name": "毒弹",
+    "damage_multiplier": 0.8,
+    "poison_max_hp_percent_per_sec": 0.02,
+    "poison_duration": 3.0,
+    "poison_max_stacks": 3,
+    "emp_interval": 0,
+    "allowed_weapon_types": ["pistol", "smg", "shotgun", "rifle", "laser"]
+  },
+
+  "ammo_electromagnetic": {
+    "id": "ammo_electromagnetic",
+    "name": "电磁弹",
+    "damage_multiplier": 1.0,
+    "emp_duration": 1.5,
+    "emp_every_n_shots": 5,
+    "allowed_weapon_types": ["pistol", "smg", "shotgun"]
+  },
+
+  "ammo_submunition": {
+    "id": "ammo_submunition",
+    "name": "子母弹",
+    "damage_multiplier": 1.0,
+    "shotgun_split_count": 3,
+    "shotgun_split_damage_scale": 0.3,
+    "smg_split_delay": 0.5,
+    "smg_split_count": 2,
+    "smg_split_angle_deg": 15,
+    "smg_split_damage_scale": 1.0,
+    "allowed_weapon_types": ["shotgun", "smg"]
+  },
+
+  "ammo_sniper": {
+    "id": "ammo_sniper",
+    "name": "狙击弹",
+    "damage_multiplier": 1.3,
+    "emp_interval": 0,
+    "allowed_weapon_types": ["rifle"]
+  },
+
+  "attachment_stable_basic": {
+    "id": "attachment_stable_basic",
+    "name": "稳定器·基础",
+    "accuracy_multiplier": 1.15,
+    "reload_time_delta": 0.0
+  },
+
+  "attachment_stable_advanced": {
+    "id": "attachment_stable_advanced",
+    "name": "稳定器·进阶",
+    "accuracy_multiplier": 1.25,
+    "reload_time_delta": 0.0
+  },
+
+  "attachment_brake_basic": {
+    "id": "attachment_brake_basic",
+    "name": "炮口制退器·基础",
+    "spread_multiplier": 0.85,
+    "accuracy_multiplier": 1.1,
+    "reload_time_delta": -0.2
+  },
+
+  "attachment_mag_basic": {
+    "id": "attachment_mag_basic",
+    "name": "扩容弹匣·基础",
+    "magazine_multiplier": 1.5,
+    "reload_time_delta": 0.3
   }
 }

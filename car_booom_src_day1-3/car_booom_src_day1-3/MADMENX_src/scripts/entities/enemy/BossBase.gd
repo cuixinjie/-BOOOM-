@@ -49,7 +49,15 @@ var _stomp_active: bool = false
 
 var _special_attack_damage: float = 15.0
 
+var _spread_by_phase: Array = [1, 2, 3]
+var _summon_minion_count: int = 3
+var _base_move_speed_storage: float = 60.0
+var _phase_move_scales: Array = [1.0, 1.15, 1.35]
+var _phase_cooldown_scales: Array = [1.0, 0.72, 0.48]
+var _special_damage_scales: Array = [1.0, 1.15, 1.35]
+
 func _ready() -> void:
+	_apply_boss_balance_from_config()
 	enemy_type = "boss"
 	score_value = 500
 	coin_drop_max = 50
@@ -59,6 +67,49 @@ func _ready() -> void:
 	if has_node("BossHealthBar"):
 		$BossHealthBar.visible = true
 	_update_health_bar()
+
+
+func _apply_boss_balance_from_config() -> void:
+	var cfg: Dictionary = ConfigMgr.get_enemy_stats("boss_drone_commander")
+	if cfg.is_empty():
+		return
+	max_health = float(cfg.get("max_health", max_health))
+	current_health = max_health
+	attack_damage = float(cfg.get("damage", attack_damage))
+	move_speed = float(cfg.get("move_speed", move_speed))
+	_base_move_speed_storage = move_speed
+	summon_cooldown = float(cfg.get("summon_cooldown", summon_cooldown))
+	enraged_threshold = float(cfg.get("enraged_threshold", enraged_threshold))
+	_summon_minion_count = int(cfg.get("summon_minion_count", _summon_minion_count))
+	var th: Array = cfg.get("phase_thresholds", phase_thresholds) as Array
+	if th.size() > 0:
+		phase_thresholds = th.duplicate()
+	_spread_by_phase = [
+		int(cfg.get("spread_bullets_phase_1", 1)),
+		int(cfg.get("spread_bullets_phase_2", 2)),
+		int(cfg.get("spread_bullets_phase_3", 3)),
+	]
+	_base_attack_cooldown = float(cfg.get("base_attack_cooldown", _base_attack_cooldown))
+	_current_attack_cooldown = _base_attack_cooldown
+	var pms: Array = cfg.get("phase_move_speed_scale", _phase_move_scales) as Array
+	if pms.size() >= 3:
+		_phase_move_scales = [float(pms[0]), float(pms[1]), float(pms[2])]
+	var pcs: Array = cfg.get("phase_cooldown_scale", _phase_cooldown_scales) as Array
+	if pcs.size() >= 3:
+		_phase_cooldown_scales = [float(pcs[0]), float(pcs[1]), float(pcs[2])]
+	var sds: Array = cfg.get("special_damage_scale", _special_damage_scales) as Array
+	if sds.size() >= 3:
+		_special_damage_scales = [float(sds[0]), float(sds[1]), float(sds[2])]
+	score_value = int(cfg.get("score_value", score_value))
+	var cd: Array = cfg.get("coin_drop", [30, 50])
+	var ed: Array = cfg.get("energy_drop", [10, 20])
+	if cd.size() >= 2:
+		coin_drop_min = int(cd[0])
+		coin_drop_max = int(cd[1])
+	if ed.size() >= 2:
+		energy_drop_min = int(ed[0])
+		energy_drop_max = int(ed[1])
+
 
 func _process(delta: float) -> void:
 	if is_dead:
@@ -92,15 +143,15 @@ func set_phase(new_phase: int) -> void:
 	_on_phase_start(new_phase)
 
 func _on_phase_start(phase: int) -> void:
+	move_speed = _base_move_speed_storage
+	var idx: int = clampi(phase - 1, 0, _phase_move_scales.size() - 1)
+	move_speed *= float(_phase_move_scales[idx])
+	var cds: float = float(_phase_cooldown_scales[clampi(phase - 1, 0, _phase_cooldown_scales.size() - 1)])
+	_current_attack_cooldown = _base_attack_cooldown * cds
 	match phase:
-		2:
-			move_speed *= 1.2
-			_current_attack_cooldown = _base_attack_cooldown * 0.7
 		3:
-			move_speed *= 1.5
-			_current_attack_cooldown = _base_attack_cooldown * 0.5
 			if _summon_timer <= 0:
-				summon_minions("drone_basic", 3)
+				summon_minions("drone_basic", _summon_minion_count)
 
 func _trigger_enrage() -> void:
 	is_enraged = true
@@ -153,7 +204,7 @@ func _fire_bullet_pattern() -> void:
 	if not is_instance_valid(target_node):
 		return
 	var dir = (target_node.global_position - global_position).normalized()
-	var spread_count = 1 + (current_phase - 1)
+	var spread_count: int = int(_spread_by_phase[clampi(current_phase - 1, 0, _spread_by_phase.size() - 1)])
 	for i in spread_count:
 		var angle_offset = (i - (spread_count - 1) * 0.5) * 0.3
 		var rotated_dir = dir.rotated(angle_offset)
@@ -170,9 +221,10 @@ func _apply_elbow_damage() -> void:
 	if not is_instance_valid(target_node):
 		return
 	var dist = global_position.distance_to(target_node.global_position)
+	var sm: float = float(_special_damage_scales[clampi(current_phase - 1, 0, _special_damage_scales.size() - 1)])
 	if dist <= 200.0:
-		DamageSystem.apply_damage(target_node, DamageSystem.DamageInfo.new(self, _special_attack_damage * current_phase, "impact"))
-	GameManager.damage_vehicle(_special_attack_damage * current_phase * 0.5)
+		DamageSystem.apply_damage(target_node, DamageSystem.DamageInfo.new(self, _special_attack_damage * float(current_phase) * sm, "impact"))
+	GameManager.damage_vehicle(_special_attack_damage * float(current_phase) * 0.5 * sm)
 	AudioManager.play_sfx("boss_elbow")
 
 func _trigger_stomp() -> void:
@@ -187,9 +239,10 @@ func _apply_stomp_damage() -> void:
 	if not is_instance_valid(target_node):
 		return
 	var dist = global_position.distance_to(target_node.global_position)
+	var sm: float = float(_special_damage_scales[clampi(current_phase - 1, 0, _special_damage_scales.size() - 1)])
 	if dist <= 300.0:
-		DamageSystem.apply_damage(target_node, DamageSystem.DamageInfo.new(self, _special_attack_damage * 2.0, "impact"))
-	GameManager.damage_vehicle(_special_attack_damage)
+		DamageSystem.apply_damage(target_node, DamageSystem.DamageInfo.new(self, _special_attack_damage * 2.0 * sm, "impact"))
+	GameManager.damage_vehicle(_special_attack_damage * sm)
 	AudioManager.play_sfx("boss_stomp")
 
 func perform_attack() -> void:

@@ -48,6 +48,9 @@ var energy_drop_max: int = 2
 
 var target_node: Node = null
 
+var _stun_time_remaining: float = 0.0
+var _poison_stacks: Array = []
+
 # ===== 接口定义 =====
 ## set_target(target: Node) -> void
 ##   设置追击目标
@@ -60,6 +63,9 @@ var target_node: Node = null
 ##
 ## die(killer: Node) -> void
 ##   敌人死亡
+##
+## apply_stun(duration: float) -> void
+## apply_poison_stack(max_hp_pct_per_sec: float, duration: float, stack_cap: int = 3) -> void
 ## ===== 接口结束 =====
 
 func _ready() -> void:
@@ -79,8 +85,47 @@ func _connect_signals() -> void:
 func _on_world_state_changed(_from_state: int, _to_state: int) -> void:
 	pass
 
+func apply_stun(duration: float) -> void:
+	if duration <= 0.0:
+		return
+	_stun_time_remaining = maxf(_stun_time_remaining, duration)
+
+
+func apply_poison_stack(max_hp_pct_per_sec: float, duration: float, stack_cap: int = 3) -> void:
+	if max_hp_pct_per_sec <= 0.0 or duration <= 0.0:
+		return
+	if _poison_stacks.size() >= stack_cap:
+		for s in _poison_stacks:
+			if s is Dictionary:
+				s["time_left"] = maxf(float(s.get("time_left", 0.0)), duration)
+		return
+	_poison_stacks.append({"pct": max_hp_pct_per_sec, "time_left": duration})
+
+
+func _tick_poison(delta: float) -> void:
+	var rate: float = 0.0
+	var kept: Array = []
+	for s in _poison_stacks:
+		if not s is Dictionary:
+			continue
+		var tl: float = float(s.get("time_left", 0.0)) - delta
+		if tl > 0.0:
+			s["time_left"] = tl
+			rate += float(s.get("pct", 0.0))
+			kept.append(s)
+	_poison_stacks = kept
+	if rate > 0.0 and max_health > 0.0:
+		take_damage(max_health * rate * delta, self)
+
+
 func _process(delta: float) -> void:
 	if is_dead:
+		return
+
+	_tick_poison(delta)
+
+	if _stun_time_remaining > 0.0:
+		_stun_time_remaining -= delta
 		return
 
 	if _attack_timer > 0:
