@@ -89,9 +89,10 @@ func get_object(pool_name: String, scene_path: String = "", spawn_parent: Node =
 	var pool: Array = pool_data["pool"]
 
 	for instance in pool:
+		# 关键修复：先检查有效性，再访问 visible 属性
+		if not is_instance_valid(instance):
+			continue
 		if not instance.visible and instance.get_parent() == self:
-			if not is_instance_valid(instance):
-				continue
 			instance.set_process(true)
 			instance.set_physics_process(true)
 			instance.visible = true
@@ -135,15 +136,18 @@ func _get_spawn_target() -> Node:
 func return_object(pool_name: String, instance: Node) -> void:
 	if not _pools.has(pool_name):
 		push_warning("[ObjectPool] Unknown pool: " + pool_name)
-		instance.queue_free()
+		if is_instance_valid(instance):
+			instance.queue_free()
 		return
 
+	# 关键修复：检查实例有效性后再操作
 	if is_instance_valid(instance):
 		if instance.has_method("on_despawned"):
 			instance.on_despawned()
 		instance.set_process(false)
 		instance.set_physics_process(false)
-		instance.visible = false
+		if instance.has_method("visible"):
+			instance.visible = false
 		instance.reparent(self)
 
 func clear_pool(pool_name: String) -> void:

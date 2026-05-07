@@ -87,13 +87,15 @@ func _on_world_state_changed(from_state: int, to_state: int) -> void:
 
 func activate() -> void:
 	is_active = true
-	visible = true
+	if is_instance_valid(self):
+		visible = true
 	set_process(true)
 	set_physics_process(true)
 
 func deactivate() -> void:
 	is_active = false
-	visible = false
+	if is_instance_valid(self):
+		visible = false
 	set_process(false)
 	set_physics_process(false)
 

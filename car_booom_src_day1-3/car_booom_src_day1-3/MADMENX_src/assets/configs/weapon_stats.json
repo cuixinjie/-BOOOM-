@@ -1,8 +1,10 @@
 {
   "_comment": "武器属性配置 - 合并版",
-  "_version": "1.0",
+  "_version": "1.1",
   "_merged_date": "2026-05-02",
+  "_updated_date": "2026-05-06",
   "_contributors": ["新街", "池言いく", "cjs"],
+  "_day4_update": "添加狙击枪range字段，霰弹枪散射配置已完整",
 
   "pistol_basic": {
     "id": "pistol_basic",
@@ -78,6 +80,7 @@
     "bullet_type": "player_basic",
     "sound_type": "rifle",
     "piercing": 1,
+    "range": 1500,
     "description": "高伤害，穿透一发"
   },
 

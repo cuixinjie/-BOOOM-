@@ -44,6 +44,15 @@ text = "Coins: 0"
 layout_mode = 2
 text = "Lv.1"
 
+[node name="ProfLabel" type="Label" parent="DriverHUD/VBox"]
+layout_mode = 2
+text = "手枪 Lv.1 (0%)"
+
+[node name="ProfBar" type="ProgressBar" parent="DriverHUD/VBox"]
+layout_mode = 2
+max_value = 100.0
+value = 0.0
+
 [node name="ShooterHUD" type="Control" parent="."]
 anchors_preset = 1
 anchor_left = 1.0

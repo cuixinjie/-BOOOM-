@@ -3,14 +3,17 @@
 ## 功能说明：
 ## - 管理载具的特殊技能
 ## - 技能冷却和激活
+## - EMP期间护盾等电子技能失效（Day 4完善）
 ##
 ## 对接注意事项：
 ## - 技能效果通过 Callable 回调实现
 ## - 护盾持续时间由 Timer 控制，避免协程问题
+## - EMP期间电子技能（护盾）无法激活
 ##
 ## 创建人：池言いく
 ## 创建日期：2026-04-29
 ## 修复日期：2026-05-02
+## Day 4完善：EMP电子技能禁用逻辑（由新街实现）
 
 class_name VehicleSkills
 extends Node
@@ -23,6 +26,9 @@ var vehicle: Node = null
 var skill_slots: Dictionary = {}
 
 var _cooldown_timers: Dictionary = {}
+
+# EMP状态追踪
+var _is_emp_disabled: bool = false
 
 # ===== 接口定义 =====
 ## register_skill(skill_id: String, cooldown: float, effect: Callable) -> void
@@ -42,6 +48,24 @@ func _ready() -> void:
 	if vehicle == null:
 		vehicle = get_parent()
 	_initialize_default_skills()
+	_connect_emp_signals()
+
+func _connect_emp_signals() -> void:
+	if not EventBus.emp_activated.is_connected(_on_emp_activated):
+		EventBus.emp_activated.connect(_on_emp_activated)
+	if not EventBus.emp_deactivated.is_connected(_on_emp_deactivated):
+		EventBus.emp_deactivated.connect(_on_emp_deactivated)
+
+func _on_emp_activated() -> void:
+	_is_emp_disabled = true
+	# EMP期间强制关闭所有电子技能
+	if vehicle and vehicle.has_method("set_shield_active"):
+		vehicle.set_shield_active(false)
+	print("[VehicleSkills] EMP active — electronic skills disabled")
+
+func _on_emp_deactivated() -> void:
+	_is_emp_disabled = false
+	print("[VehicleSkills] EMP ended — electronic skills restored")
 
 func _process(delta: float) -> void:
 	for skill_id in _cooldown_timers.keys():
@@ -67,6 +91,11 @@ func activate_skill(skill_id: String) -> void:
 		return
 
 	if _cooldown_timers.has(skill_id):
+		return
+
+	# EMP期间禁用所有电子技能
+	if _is_emp_disabled and skill_id in ["shield"]:
+		print("[VehicleSkills] Skill ", skill_id, " blocked by EMP!")
 		return
 
 	var skill = skill_slots[skill_id]

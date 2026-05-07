@@ -1,14 +1,15 @@
 {
-  "_comment": "商店商品配置 - 合并版",
-  "_version": "1.0",
+  "_comment": "商店商品配置 - Day 5完善版",
+  "_version": "1.2",
   "_merged_date": "2026-05-02",
   "_contributors": ["新街", "cjs"],
+  "_day5_additions": ["rest_point_rewards配置", "buff分类商品", "配件系统（稳定器/扩容弹匣/炮口制退器/追踪模块）"],
 
   "shop_items": [
     {
       "id": "weapon_pistol_rapid",
       "name": "速射手枪",
-      "description": "射速更快的手枪",
+      "description": "射速更快的手枪，适合快速输出",
       "price": 500,
       "type": "weapon",
       "unlocks": "pistol_rapid",
@@ -17,7 +18,7 @@
     {
       "id": "weapon_shotgun",
       "name": "霰弹枪",
-      "description": "近距离高伤害散射武器",
+      "description": "近距离高伤害散射武器，5发散射",
       "price": 800,
       "type": "weapon",
       "unlocks": "shotgun",
@@ -26,7 +27,7 @@
     {
       "id": "weapon_smg",
       "name": "冲锋枪",
-      "description": "超高射速持续输出",
+      "description": "超高射速持续输出，大弹匣",
       "price": 1200,
       "type": "weapon",
       "unlocks": "smg",
@@ -35,7 +36,7 @@
     {
       "id": "weapon_rifle",
       "name": "狙击步枪",
-      "description": "高伤害穿透武器",
+      "description": "高伤害穿透武器，一击必杀",
       "price": 2000,
       "type": "weapon",
       "unlocks": "rifle",
@@ -44,7 +45,7 @@
     {
       "id": "weapon_laser",
       "name": "激光枪",
-      "description": "中等伤害稳定射速",
+      "description": "中等伤害稳定射速，高精度",
       "price": 1500,
       "type": "weapon",
       "unlocks": "laser",
@@ -53,7 +54,7 @@
     {
       "id": "health_upgrade",
       "name": "护甲强化",
-      "description": "最大生命值+20",
+      "description": "最大生命值+20，提高生存能力",
       "price": 300,
       "type": "upgrade",
       "effect": {"max_health": 20},
@@ -62,7 +63,7 @@
     {
       "id": "speed_upgrade",
       "name": "引擎升级",
-      "description": "最大速度+10%",
+      "description": "最大速度+10%，更快反应",
       "price": 400,
       "type": "upgrade",
       "effect": {"max_speed": 0.1},
@@ -71,7 +72,7 @@
     {
       "id": "nitro_upgrade",
       "name": "氮气罐扩容",
-      "description": "氮气容量+30%",
+      "description": "氮气容量+30%，冲刺更持久",
       "price": 350,
       "type": "upgrade",
       "effect": {"nitro_capacity": 0.3},
@@ -80,7 +81,7 @@
     {
       "id": "coin_boost",
       "name": "幸运金币",
-      "description": "金币获取量+20%",
+      "description": "金币获取量+20%，经济优势",
       "price": 600,
       "type": "buff",
       "effect": {"coin_multiplier": 0.2},
@@ -89,16 +90,108 @@
     {
       "id": "skill_nitro_plus",
       "name": "氮气强化",
-      "description": "氮气冲刺速度+25%",
+      "description": "氮气冲刺速度+25%，更快的机动",
       "price": 700,
       "type": "skill_upgrade",
+      "effect": {"nitro_capacity": 0.3},
       "tier": 2
+    },
+    {
+      "id": "attachment_stabilizer_basic",
+      "name": "稳定器 I",
+      "description": "减少武器后坐力，提高射击精度+15%",
+      "price": 300,
+      "type": "attachment",
+      "attachment_type": "stabilizer",
+      "tier": 1,
+      "effect": {"accuracy_bonus": 0.15}
+    },
+    {
+      "id": "attachment_stabilizer_advanced",
+      "name": "稳定器 II",
+      "description": "进阶稳定器，射击精度+30%",
+      "price": 600,
+      "type": "attachment",
+      "attachment_type": "stabilizer",
+      "tier": 2,
+      "effect": {"accuracy_bonus": 0.30}
+    },
+    {
+      "id": "attachment_stabilizer_ultimate",
+      "name": "稳定器 III",
+      "description": "顶级稳定器，射击精度+50%，后坐力大幅降低",
+      "price": 1200,
+      "type": "attachment",
+      "attachment_type": "stabilizer",
+      "tier": 3,
+      "effect": {"accuracy_bonus": 0.50, "recoil_reduction": 0.4}
+    },
+    {
+      "id": "attachment_muzzle_brake_basic",
+      "name": "炮口制退器 I",
+      "description": "减少后坐力25%，略微提升射速",
+      "price": 350,
+      "type": "attachment",
+      "attachment_type": "muzzle_brake",
+      "tier": 1,
+      "effect": {"recoil_reduction": 0.25, "fire_rate_bonus": 0.05}
+    },
+    {
+      "id": "attachment_muzzle_brake_advanced",
+      "name": "炮口制退器 II",
+      "description": "进阶炮口制退器，后坐力-45%，射速+10%",
+      "price": 700,
+      "type": "attachment",
+      "attachment_type": "muzzle_brake",
+      "tier": 2,
+      "effect": {"recoil_reduction": 0.45, "fire_rate_bonus": 0.10}
+    },
+    {
+      "id": "attachment_extended_mag_basic",
+      "name": "扩容弹匣 I",
+      "description": "弹匣容量+25%",
+      "price": 250,
+      "type": "attachment",
+      "attachment_type": "extended_mag",
+      "tier": 1,
+      "effect": {"magazine_size_bonus": 0.25}
+    },
+    {
+      "id": "attachment_extended_mag_advanced",
+      "name": "扩容弹匣 II",
+      "description": "进阶扩容弹匣，弹匣容量+50%",
+      "price": 500,
+      "type": "attachment",
+      "attachment_type": "extended_mag",
+      "tier": 2,
+      "effect": {"magazine_size_bonus": 0.50}
+    },
+    {
+      "id": "attachment_tracking_basic",
+      "name": "追踪模块 I",
+      "description": "子弹具有轻微追踪效果，对移动目标命中率+20%",
+      "price": 800,
+      "type": "attachment",
+      "attachment_type": "tracking",
+      "tier": 1,
+      "effect": {"tracking_strength": 0.2, "hit_chance_bonus": 0.20}
+    },
+    {
+      "id": "attachment_tracking_advanced",
+      "name": "追踪模块 II",
+      "description": "进阶追踪模块，子弹追踪强度+40%，命中率+35%",
+      "price": 1500,
+      "type": "attachment",
+      "attachment_type": "tracking",
+      "tier": 2,
+      "effect": {"tracking_strength": 0.4, "hit_chance_bonus": 0.35}
     }
   ],
 
   "rest_point_rewards": {
     "coin_bonus": 50,
     "health_restore_ratio": 0.5,
-    "skill_reset": true
+    "skill_reset": true,
+    "energy_restore": 20
   }
 }

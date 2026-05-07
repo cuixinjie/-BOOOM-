@@ -1,12 +1,14 @@
 # RoadVisualizer -路段可视化系统
+# 垂直追尾视角：机车在下方，道路在屏幕中下方
 class_name RoadVisualizer
 extends CanvasLayer
 
 signal segment_progress_changed(progress: float)
 
-const ROAD_TOP: float = 300.0
-const ROAD_BOTTOM: float = 780.0
-const ROAD_CENTER_Y: float = (ROAD_TOP + ROAD_BOTTOM) / 2.0
+# 垂直视角：道路区域在屏幕中下方
+const ROAD_TOP: float = 450.0    # 道路上边界（偏下）
+const ROAD_BOTTOM: float = 900.0   # 道路下边界
+const ROAD_CENTER_Y: float = 675.0  # 道路中心Y
 const ROAD_HEIGHT: float = ROAD_BOTTOM - ROAD_TOP
 
 const LANE_COUNT: int = 4
@@ -45,6 +47,10 @@ var _viewport_height: float = 1080.0
 var _game_started: bool = false
 
 var _world_road_layer: Node2D
+
+# 道路宽度过渡动画
+var _target_width_ratio: float = 1.0
+var _width_transition_speed: float = 3.0
 
 func _ready() -> void:
 	_connect_signals()
@@ -103,6 +109,9 @@ func _process(delta: float) -> void:
 		_rest_point_timer -= delta
 		if _rest_point_timer <= 0:
 			_hide_rest_point_hint()
+
+	# 平滑过渡道路宽度
+	_update_road_width_transition(delta)
 
 func _on_vehicle_speed_changed(speed: float) -> void:
 	_scroll_speed = 150.0 + speed * 0.3
@@ -451,9 +460,20 @@ func _clear_visuals() -> void:
 	_rest_point_visual = null
 
 func _on_road_width_changed(ratio: float) -> void:
-	_current_width_ratio = clamp(ratio, 0.3, 1.0)
+	_target_width_ratio = clamp(ratio, 0.3, 1.0)
+	# 不再立即重建，只更新目标值，过渡动画在 _process 中处理
+	print("[RoadVisualizer] Road width target: ", _target_width_ratio)
+
+## 平滑过渡道路宽度
+func _update_road_width_transition(delta: float) -> void:
+	if abs(_current_width_ratio - _target_width_ratio) < 0.01:
+		if _current_width_ratio != _target_width_ratio:
+			_current_width_ratio = _target_width_ratio
+			_build_all_visuals()  # 过渡完成后重建以确保精确
+		return
+	
+	_current_width_ratio = lerp(_current_width_ratio, _target_width_ratio, _width_transition_speed * delta)
 	_build_all_visuals()
-	print("[RoadVisualizer] Road width: ", _current_width_ratio)
 
 func _on_segment_changed(segment_id: int) -> void:
 	_current_segment = segment_id
@@ -516,13 +536,24 @@ func _on_rest_point_exited() -> void:
 
 func _on_fog_activated(coverage_ratio: float) -> void:
 	if _special_overlay:
-		_special_overlay.color = Color(0.3, 0.3, 0.4, coverage_ratio * 0.5)
-	print("[RoadVisualizer] Fog activated")
+		var current_alpha = _special_overlay.color.a
+		var fog_alpha = coverage_ratio * 0.5
+		_special_overlay.color = Color(0.3, 0.3, 0.4, max(current_alpha, fog_alpha))
+	print("[RoadVisualizer] Fog activated (coverage: ", coverage_ratio, ")")
 
 func _on_fog_deactivated() -> void:
 	if _special_overlay:
+		# 所有雾效都已结束，清除雾效
 		_special_overlay.color = Color(0, 0, 0, 0)
 	print("[RoadVisualizer] Fog deactivated")
+
+func _get_special_segment_manager() -> Node:
+	var game_world = get_tree().get_first_node_in_group("GameWorld")
+	if game_world and game_world.has_node("SpecialSegmentManager"):
+		return game_world.get_node("SpecialSegmentManager")
+	elif has_node("../SpecialSegmentManager"):
+		return get_node("../SpecialSegmentManager")
+	return null
 
 func _on_game_paused() -> void:
 	_scroll_enabled = false

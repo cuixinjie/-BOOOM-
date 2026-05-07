@@ -6,6 +6,7 @@
 ## 对接注意事项：
 ## - 通过 ObjectPool 管理
 ## - 拾取调用 EconomySystem.add_energy
+## - 场景路径: res://scenes/entities/pickups/EnergyOrb.tscn
 ##
 ## 创建人：cjs
 ## 创建日期：2026-04-28
@@ -21,6 +22,7 @@ func _ready() -> void:
 
 func on_pickup(picker: Node) -> void:
 	EconomySystem.add_energy(value)
-	AudioManager.play_sfx("energy_pickup")
+	if AudioManager and AudioManager.has_method("play_sfx"):
+		AudioManager.play_sfx("energy_pickup")
 	EventBus.energy_collected.emit(value)
 	print("[EnergyOrb] Collected ", value, " energy")

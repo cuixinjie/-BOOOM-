@@ -1,0 +1,181 @@
+{
+  "_comment": "武器熟练度配置 - Day 5 池言いく负责",
+  "_version": "1.0",
+  "_created_date": "2026-05-06",
+  "_description": "各武器类型的熟练度等级阈值和升级效果，每技能最多3级",
+
+  "pistol": {
+    "type_name": "手枪",
+    "proficiency_per_kill": 5.0,
+    "proficiency_per_damage": 0.1,
+    "levels": [
+      {
+        "level": 1,
+        "threshold": 0,
+        "display_name": "手枪 Lv.1",
+        "effects": {}
+      },
+      {
+        "level": 2,
+        "threshold": 100,
+        "display_name": "手枪 Lv.2",
+        "effects": {
+          "damage_bonus": 0.08,
+          "fire_rate_bonus": 0.05
+        },
+        "description": "伤害+8%，射速+5%"
+      },
+      {
+        "level": 3,
+        "threshold": 300,
+        "display_name": "手枪 Lv.3",
+        "effects": {
+          "damage_bonus": 0.15,
+          "fire_rate_bonus": 0.10,
+          "accuracy_bonus": 0.10
+        },
+        "description": "伤害+15%，射速+10%，精准+10%"
+      }
+    ]
+  },
+
+  "smg": {
+    "type_name": "冲锋枪",
+    "proficiency_per_kill": 4.0,
+    "proficiency_per_damage": 0.08,
+    "levels": [
+      {
+        "level": 1,
+        "threshold": 0,
+        "display_name": "冲锋枪 Lv.1",
+        "effects": {}
+      },
+      {
+        "level": 2,
+        "threshold": 120,
+        "display_name": "冲锋枪 Lv.2",
+        "effects": {
+          "damage_bonus": 0.06,
+          "fire_rate_bonus": 0.08
+        },
+        "description": "伤害+6%，射速+8%"
+      },
+      {
+        "level": 3,
+        "threshold": 350,
+        "display_name": "冲锋枪 Lv.3",
+        "effects": {
+          "damage_bonus": 0.12,
+          "fire_rate_bonus": 0.15,
+          "accuracy_bonus": 0.08
+        },
+        "description": "伤害+12%，射速+15%，精准+8%"
+      }
+    ]
+  },
+
+  "shotgun": {
+    "type_name": "霰弹枪",
+    "proficiency_per_kill": 8.0,
+    "proficiency_per_damage": 0.15,
+    "levels": [
+      {
+        "level": 1,
+        "threshold": 0,
+        "display_name": "霰弹枪 Lv.1",
+        "effects": {}
+      },
+      {
+        "level": 2,
+        "threshold": 150,
+        "display_name": "霰弹枪 Lv.2",
+        "effects": {
+          "damage_bonus": 0.10,
+          "spread_reduction": 0.05
+        },
+        "description": "伤害+10%，散布-5%"
+      },
+      {
+        "level": 3,
+        "threshold": 400,
+        "display_name": "霰弹枪 Lv.3",
+        "effects": {
+          "damage_bonus": 0.20,
+          "spread_reduction": 0.10,
+          "pellet_bonus": 1
+        },
+        "description": "伤害+20%，散布-10%，弹丸+1"
+      }
+    ]
+  },
+
+  "rifle": {
+    "type_name": "狙击步枪",
+    "proficiency_per_kill": 10.0,
+    "proficiency_per_damage": 0.20,
+    "levels": [
+      {
+        "level": 1,
+        "threshold": 0,
+        "display_name": "狙击步枪 Lv.1",
+        "effects": {}
+      },
+      {
+        "level": 2,
+        "threshold": 200,
+        "display_name": "狙击步枪 Lv.2",
+        "effects": {
+          "damage_bonus": 0.12,
+          "fire_rate_bonus": 0.10
+        },
+        "description": "伤害+12%，射速+10%"
+      },
+      {
+        "level": 3,
+        "threshold": 500,
+        "display_name": "狙击步枪 Lv.3",
+        "effects": {
+          "damage_bonus": 0.25,
+          "fire_rate_bonus": 0.20,
+          "piercing_bonus": 1
+        },
+        "description": "伤害+25%，射速+20%，穿透+1"
+      }
+    ]
+  },
+
+  "laser": {
+    "type_name": "激光枪",
+    "proficiency_per_kill": 6.0,
+    "proficiency_per_damage": 0.12,
+    "levels": [
+      {
+        "level": 1,
+        "threshold": 0,
+        "display_name": "激光枪 Lv.1",
+        "effects": {}
+      },
+      {
+        "level": 2,
+        "threshold": 180,
+        "display_name": "激光枪 Lv.2",
+        "effects": {
+          "damage_bonus": 0.10,
+          "accuracy_bonus": 0.10
+        },
+        "description": "伤害+10%，精准+10%"
+      },
+      {
+        "level": 3,
+        "threshold": 450,
+        "display_name": "激光枪 Lv.3",
+        "effects": {
+          "damage_bonus": 0.18,
+          "accuracy_bonus": 0.18,
+          "fire_rate_bonus": 0.05
+        },
+        "description": "伤害+18%，精准+18%，射速+5%"
+      }
+    ]
+  }
+}

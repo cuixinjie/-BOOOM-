@@ -33,12 +33,45 @@ func _ready() -> void:
 	super._ready()
 
 func _process(delta: float) -> void:
+	if is_dead:
+		return
+
+	# EMP期间敌人完全静止
+	if _is_emp_disabled:
+		return
+
+	if _attack_timer > 0:
+		_attack_timer -= delta
+
 	if _is_charging:
 		_charge_timer -= delta
 		if _charge_timer <= 0:
 			_fire_laser()
+		# 充能期间仍然处理攻击计时器
 		return
-	super._process(delta)
+
+	# 非充能状态下的正常行为
+	match enemy_state:
+		EnemyState.IDLE:
+			_update_idle()
+		EnemyState.CHASE:
+			_update_chase(delta)
+		EnemyState.ATTACK:
+			_cached_delta = delta
+			_update_attack()
+
+## 被击中时重置充能状态（防止卡住）
+func take_damage(amount: float, source: Node = null) -> void:
+	# 重置充能状态，允许敌人被击中后恢复移动
+	if _is_charging:
+		_is_charging = false
+		_charge_timer = 0.0
+		# 关键修复：检查节点有效性
+		if has_node("LaserChargeEffect") and is_instance_valid($LaserChargeEffect):
+			$LaserChargeEffect.visible = false
+		print("[DroneLaser] Charge cancelled due to damage")
+
+	super.take_damage(amount, source)
 
 func perform_attack() -> void:
 	if not is_instance_valid(target_node):
@@ -47,15 +80,20 @@ func perform_attack() -> void:
 	super.perform_attack()
 	_is_charging = true
 	_charge_timer = laser_charge_time
-	$LaserChargeEffect.visible = true
+	# 关键修复：检查节点有效性
+	if has_node("LaserChargeEffect") and is_instance_valid($LaserChargeEffect):
+		$LaserChargeEffect.visible = true
 
 func _fire_laser() -> void:
 	_is_charging = false
-	$LaserChargeEffect.visible = false
+	# 关键修复：检查节点有效性
+	if has_node("LaserChargeEffect") and is_instance_valid($LaserChargeEffect):
+		$LaserChargeEffect.visible = false
 
 	if not is_instance_valid(target_node):
 		return
 
-	var dir = (target_node.global_position - global_position).normalized()
-	BulletFactory.create_enemy_bullet("enemy_laser", dir, attack_damage * 1.5)
+	# 垂直视角：激光向下发射
+	var dir = Vector2(0, 1)
+	BulletFactory.create_enemy_bullet("enemy_laser", dir, attack_damage * 1.5, global_position)
 	AudioManager.play_sfx("laser_fire")

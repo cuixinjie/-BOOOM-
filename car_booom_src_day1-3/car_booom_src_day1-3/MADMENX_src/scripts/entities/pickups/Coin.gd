@@ -7,6 +7,7 @@
 ## 对接注意事项：
 ## - 通过 ObjectPool 管理，禁止直接 instance()
 ## - 拾取调用 EconomySystem.add_coins
+## - 场景路径: res://scenes/entities/pickups/Coin.tscn
 ##
 ## 创建人：cjs
 ## 创建日期：2026-04-28
@@ -27,6 +28,7 @@ func _ready() -> void:
 
 func on_pickup(picker: Node) -> void:
 	EconomySystem.add_coins(value)
-	AudioManager.play_coin_sound()
+	if AudioManager and AudioManager.has_method("play_coin_sound"):
+		AudioManager.play_coin_sound()
 	EventBus.coin_collected.emit(value)
 	print("[Coin] Collected ", value, " coins")

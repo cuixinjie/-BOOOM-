@@ -75,6 +75,8 @@ signal shooter_input_changed(input_data: Dictionary)
 signal weapon_fired(weapon_id: String)
 signal weapon_reloaded(weapon_id: String)
 signal ammo_type_changed(ammo_type: String)
+signal weapon_unlocked(weapon_id: String)
+signal weapon_switch_requested(weapon_id: String)
 
 # ===== 特殊路段信号 =====
 signal special_segment_started(segment_type: String)
@@ -101,6 +103,9 @@ signal boss_phase_timeout()
 
 # ===== 商店信号 =====
 signal shop_purchase_requested(item_id: String)
+signal shop_refresh_requested()
+signal attachment_purchased(item_id: String, effect: Dictionary)
+signal attachment_installed(attachment_type: String, item_id: String)
 
 # ===== 音效信号 =====
 signal sfx_requested(sfx_name: String)
@@ -111,7 +116,17 @@ signal screen_shake_requested(duration: float, intensity: float)
 # ===== 障碍生成信号 =====
 signal obstacles_generate_requested(segment_id: int, difficulty: String)
 signal obstacles_clear_requested()
+signal traffic_jam_obstacles_requested(multiplier: float)
 
 # ===== 物品掉落信号 =====
 signal item_picked_up(item: Node, picker: Node)
 signal drop_spawned(drop: Node, position: Vector2)
+
+# ===== 武器熟练度信号（Day 5 池言いく）=====
+signal weapon_proficiency_changed(weapon_type: String, proficiency: float, level: int)
+signal weapon_proficiency_level_up(weapon_type: String, new_level: int, unlocked_effects: Dictionary)
+signal weapon_mastered(weapon_type: String)
+
+# ===== 弹药类型信号（Day 5 长安旧梦）=====
+# 注意：ammo_type_changed 已在上方第77行定义，不要重复定义
+signal bullet_fired_with_ammo(bullet: Node, base_damage: float)

@@ -99,6 +99,7 @@ func _get_segment_generator() -> Node:
 	if has_node("/root/SegmentGenerator"):
 		var sg = get_node("/root/SegmentGenerator")
 		if sg.has_method("start_generation"):
+			_pass_level_config_to_managers()
 			return sg
 
 	# 其次在当前节点下查找 SegmentGenerator
@@ -112,6 +113,7 @@ func _get_segment_generator() -> Node:
 	if game_world and game_world.has_node("SegmentGenerator"):
 		var seg_gen = game_world.get_node("SegmentGenerator")
 		if seg_gen.has_method("start_generation"):
+			_pass_level_config_to_managers()
 			return seg_gen
 
 	# 最后才创建内联生成器
@@ -119,8 +121,26 @@ func _get_segment_generator() -> Node:
 	gen.set_script(load("res://scripts/systems/level/SegmentGenerator.gd"))
 	gen.name = "SegmentGenerator"
 	add_child(gen)
+	_pass_level_config_to_managers()
 	print("[LevelManager] Created inline SegmentGenerator (Autoload not found)")
 	return gen
+
+func _pass_level_config_to_managers() -> void:
+	# 将关卡配置传递给SpecialSegmentManager以便多效果叠加计算
+	var special_manager = _find_special_segment_manager()
+	if special_manager and special_manager.has_method("set_level_config"):
+		special_manager.set_level_config(_level_config)
+		print("[LevelManager] Passed level config to SpecialSegmentManager")
+
+func _find_special_segment_manager() -> Node:
+	var game_world = get_tree().get_first_node_in_group("GameWorld")
+	if game_world and game_world.has_node("SpecialSegmentManager"):
+		return game_world.get_node("SpecialSegmentManager")
+	if has_node("SpecialSegmentManager"):
+		return get_node("SpecialSegmentManager")
+	if has_node("/root/SpecialSegmentManager"):
+		return get_node("/root/SpecialSegmentManager")
+	return null
 
 func pause_level() -> void:
 	if level_state == LevelState.PLAYING:

@@ -3,13 +3,20 @@
 ## 功能说明：
 ## - 子弹创建的统一入口
 ## - 管理子弹类型和参数
+## - 集成弹药类型系统效果（穿甲/爆炸/毒弹/电磁弹/子母弹/狙击弹）
+##
+## Day 5完善内容（长安旧梦）：
+## - 弹药效果集成：子弹创建时自动应用AmmoSystem的弹药类型效果
+## - 爆炸弹范围伤害、毒弹持续伤害、电磁弹眩晕、子母弹分裂
 ##
 ## 对接注意事项：
 ## - 所有子弹创建必须通过此工厂
 ## - 池名由工厂统一管理（Bullet_{type_name} / BulletEnemy_{type_name}）
+## - 弹药类型效果由AmmoSystem管理，通过BulletFactory应用到子弹
 ##
 ## 创建人：长安旧梦
 ## 创建日期：2026-04-29
+## Day 5完善：弹药类型效果集成（2026-05-06）
 
 extends Node
 
@@ -28,7 +35,7 @@ var _bullet_scenes: Dictionary = {}
 
 func _ready() -> void:
 	_initialize_bullet_types()
-	print("[BulletFactory] Initialized")
+	print("[BulletFactory] Initialized with ammo system integration")
 
 func _initialize_bullet_types() -> void:
 	_bullet_scenes["player_basic"] = "res://scenes/entities/bullets/BulletPlayer.tscn"
@@ -47,8 +54,40 @@ func create_player_bullet(type_name: String, dir: Vector2, dmg: float, pierce: i
 	if bullet:
 		var spd = _get_bullet_speed(type_name, true)
 		bullet.set_pool_name(pool_name)
-		bullet.fire(dir, spd, dmg, 0, pierce, spawn_pos)  # owner=0 for PLAYER
+		bullet.fire(dir, spd, dmg, 0, pierce, spawn_pos)
+
+		# 应用弹药类型效果（Day 5新增，通过EventBus信号解耦）
+		if EventBus and EventBus.has_signal("bullet_fired_with_ammo"):
+			EventBus.bullet_fired_with_ammo.emit(bullet, dmg)
+
 		bullet.name = "BulletPlayer_" + type_name
+
+	return bullet as BulletBase
+
+## 创建玩家子弹（带配件效果参数 + 弹药类型效果）
+func create_player_bullet_ex(type_name: String, dir: Vector2, dmg: float, pierce: int, spawn_pos: Vector2, extra_params: Dictionary) -> BulletBase:
+	var pool_name = "Bullet_" + type_name
+	var scene_path = _bullet_scenes.get(type_name, "res://scenes/entities/bullets/BulletPlayer.tscn")
+	var bullet = ObjectPool.get_object(pool_name, scene_path)
+
+	if bullet:
+		var spd = _get_bullet_speed(type_name, true)
+		bullet.set_pool_name(pool_name)
+		bullet.fire(dir, spd, dmg, 0, pierce, spawn_pos)
+
+		# 应用配件追踪效果
+		if extra_params is Dictionary:
+			if extra_params.has("tracking_strength"):
+				bullet.set_tracking(extra_params["tracking_strength"])
+			if extra_params.has("hit_chance_bonus"):
+				bullet.set_hit_chance_bonus(extra_params["hit_chance_bonus"])
+
+		# 应用弹药类型效果（Day 5新增，通过EventBus信号解耦）
+		if EventBus and EventBus.has_signal("bullet_fired_with_ammo"):
+			EventBus.bullet_fired_with_ammo.emit(bullet, dmg)
+
+		bullet.name = "BulletPlayer_" + type_name
+		print("[BulletFactory] Created player bullet with ammo effects: type=", type_name)
 
 	return bullet as BulletBase
 

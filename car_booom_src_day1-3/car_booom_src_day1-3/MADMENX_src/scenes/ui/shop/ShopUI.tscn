@@ -18,34 +18,75 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -200.0
-offset_right = 200.0
-offset_bottom = 200.0
+offset_left = -350.0
+offset_top = -280.0
+offset_right = 350.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
 
-[node name="ShopTitle" type="Label" parent="Panel/VBox"]
+[node name="Header" type="HBoxContainer" parent="Panel/VBox"]
 layout_mode = 2
+
+[node name="ShopTitle" type="Label" parent="Panel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "SHOP"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="CoinLabel" type="Label" parent="Panel/VBox"]
+[node name="CoinsLabel" type="Label" parent="Panel/VBox/Header"]
 layout_mode = 2
 text = "Coins: 0"
+horizontal_alignment = 2
+
+[node name="Spacer" type="Control" parent="Panel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="Panel/VBox/Header"]
+layout_mode = 2
+text = "CLOSE"
 
 [node name="HSeparator" type="HSeparator" parent="Panel/VBox"]
 layout_mode = 2
+
+[node name="CategoryTabs" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="TabAll" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ 全部 ]"
+
+[node name="TabWeapons" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ 武器 ]"
+
+[node name="TabUpgrades" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ 升级 ]"
+
+[node name="TabSkills" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ 技能 ]"
+
+[node name="TabAttachments" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ 配件 ]"
+
+[node name="TabBuffs" type="Button" parent="Panel/VBox/CategoryTabs"]
+layout_mode = 2
+text = "[ Buff ]"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ShopItems" type="VBoxContainer" parent="Panel/VBox/ScrollContainer"]
+[node name="ItemsContainer" type="VBoxContainer" parent="Panel/VBox/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

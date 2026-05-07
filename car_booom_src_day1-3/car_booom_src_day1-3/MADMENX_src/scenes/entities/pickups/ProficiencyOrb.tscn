@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="bkprof001"]
+
+[ext_resource type="Script" path="res://scripts/entities/pickups/ProficiencyOrb.gd" id="1_p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_phys"]
+radius = 12.0
+
+[node name="ProficiencyOrb" type="Area2D"]
+z_index = 2
+script = ExtResource("1_p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_phys")
+
+[node name="Sprite2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, -10, 10, 0, 0, 10, -10, 0)
+color = Color(1.0, 0.8, 0.0, 1.0)

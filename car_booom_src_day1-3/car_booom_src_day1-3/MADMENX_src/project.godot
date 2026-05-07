@@ -38,6 +38,9 @@ SegmentGenerator="*res://scripts/systems/level/SegmentGenerator.gd"
 SpecialSegmentManager="*res://scripts/systems/special/SpecialSegmentManager.gd"
 RestPointManager="*res://scripts/systems/level/RestPointManager.gd"
 BulletFactory="*res://scripts/entities/bullet/BulletFactory.gd"
+WeaponProficiencySystem="*res://scripts/systems/proficiency/WeaponProficiencySystem.gd"
+WeaponUpgradeSystem="*res://scripts/systems/proficiency/WeaponUpgradeSystem.gd"
+AmmoSystem="*res://scripts/systems/combat/AmmoSystem.gd"
 
 [display]
 

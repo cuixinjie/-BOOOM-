@@ -66,7 +66,7 @@ var is_breakdown_recovery: bool = false
 ##   修复机车
 ## ===== 接口结束 =====
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not _game_config_initialized and Engine.get_process_frames() > 2:
 		_initialize_game_config()
 
@@ -191,6 +191,12 @@ func next_level() -> void:
 func get_current_level_id() -> int:
 	return current_level
 
+## get_current_level_id_string() -> String
+##   获取当前关卡ID的字符串格式（用于配置读取）
+##   例如：current_level=1 返回 "Level01"
+func get_current_level_id_string() -> String:
+	return "Level%02d" % current_level
+
 func restart_level() -> void:
 	current_level = 1
 	_vehicle_health = _max_vehicle_health
@@ -211,7 +217,7 @@ func _on_game_restart_requested() -> void:
 func _on_level_start_requested(level_id: String) -> void:
 	print("[GameManager] Level start requested: ", level_id)
 
-func _on_level_completed(level_id: int) -> void:
+func _on_level_completed(_level_id: int) -> void:
 	next_level()
 
 func _on_boss_phase_timeout() -> void:

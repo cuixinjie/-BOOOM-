@@ -4,6 +4,11 @@
 ## - 所有BOSS的基类
 ## - 支持多阶段、召唤、特殊技能
 ##
+## Day 6完善内容（长安旧梦）：
+## - BOSS弹幕发射位置修正
+## - BOSS召唤逻辑完善（循环召唤）
+## - BOSS特殊攻击伤害数值调优
+##
 ## 对接注意事项：
 ## - BOSS血量通过 ConfigManager 配置
 ## - 阶段切换通过 EventBus.boss_phase_changed 广播
@@ -12,6 +17,7 @@
 ## 创建人：长安旧梦（主）、新街（扩展）
 ## 创建日期：2026-04-29
 ## 合并日期：2026-05-02
+## Day 6完善：BOSS最终调优（2026-05-06）
 
 class_name BossBase
 extends EnemyBase
@@ -39,7 +45,6 @@ var enraged_threshold: float = 0.3
 var summon_cooldown: float = 10.0
 var _summon_timer: float = 0.0
 
-var _special_attack_queue: Array = []
 var _attack_pattern_timer: float = 0.0
 var _base_attack_cooldown: float = 2.0
 var _current_attack_cooldown: float = 2.0
@@ -48,12 +53,14 @@ var _elbow_active: bool = false
 var _stomp_active: bool = false
 
 var _special_attack_damage: float = 15.0
+var _base_attack_damage: float = 10.0
 
 func _ready() -> void:
 	enemy_type = "boss"
 	score_value = 500
 	coin_drop_max = 50
 	energy_drop_max = 20
+	_base_attack_damage = attack_damage
 
 	super._ready()
 	if has_node("BossHealthBar"):
@@ -68,6 +75,10 @@ func _process(delta: float) -> void:
 
 	if _summon_timer > 0:
 		_summon_timer -= delta
+	elif current_phase >= 3:
+		# Phase 3: 定期召唤小兵
+		if _summon_timer <= 0:
+			summon_minions("drone_basic", randi() % 2 + 2)
 
 	_check_phase_transition()
 	_update_attack_pattern(delta)
@@ -96,11 +107,14 @@ func _on_phase_start(phase: int) -> void:
 		2:
 			move_speed *= 1.2
 			_current_attack_cooldown = _base_attack_cooldown * 0.7
+			attack_damage = _base_attack_damage * 1.2
+			print("[BossBase] Phase 2: speed and damage increased")
 		3:
 			move_speed *= 1.5
 			_current_attack_cooldown = _base_attack_cooldown * 0.5
-			if _summon_timer <= 0:
-				summon_minions("drone_basic", 3)
+			attack_damage = _base_attack_damage * 1.5
+			summon_minions("drone_basic", 3)
+			print("[BossBase] Phase 3: speed, damage increased, minions spawned")
 
 func _trigger_enrage() -> void:
 	is_enraged = true
@@ -114,7 +128,9 @@ func trigger_special_attack(attack_name: String) -> void:
 
 func summon_minions(minion_type: String, count: int) -> void:
 	_summon_timer = summon_cooldown
-	EventBus.spawn_boss_requested.emit(minion_type)
+	# 循环召唤多个小兵
+	for i in range(count):
+		EventBus.spawn_boss_requested.emit(minion_type)
 	print("[BossBase] Summoning ", count, "x ", minion_type)
 
 func _update_health_bar() -> void:
@@ -152,12 +168,16 @@ func _execute_attack_pattern() -> void:
 func _fire_bullet_pattern() -> void:
 	if not is_instance_valid(target_node):
 		return
+	# 垂直视角：Boss从上方发射弹幕向下
 	var dir = (target_node.global_position - global_position).normalized()
+	# 确保弹幕向下发射
+	if dir.y > 0:
+		dir = -dir
 	var spread_count = 1 + (current_phase - 1)
 	for i in spread_count:
 		var angle_offset = (i - (spread_count - 1) * 0.5) * 0.3
 		var rotated_dir = dir.rotated(angle_offset)
-		BulletFactory.create_enemy_bullet("enemy_basic", rotated_dir, attack_damage)
+		BulletFactory.create_enemy_bullet("enemy_basic", rotated_dir, attack_damage, global_position)
 
 func _trigger_elbow_slam() -> void:
 	_elbow_active = true

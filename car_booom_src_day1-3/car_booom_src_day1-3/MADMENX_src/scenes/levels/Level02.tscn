@@ -1,23 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://bklvl002"]
+[gd_scene load_steps=8 format=3 uid="uid://bklvl002"]
 
 [ext_resource type="Script" path="res://scripts/systems/level/LevelManager.gd" id="1_lm"]
-[ext_resource type="Script" path="res://scripts/systems/level/RoadVisualizer.gd" id="2_rv"]
+[ext_resource type="Script" path="res://scripts/systems/level/SpawnSystem.gd" id="2_ss"]
+[ext_resource type="Script" path="res://scripts/systems/chase/ChaseSystem.gd" id="3_cs"]
+[ext_resource type="Script" path="res://scripts/systems/chase/BreakdownRecovery.gd" id="4_br"]
+[ext_resource type="Script" path="res://scripts/systems/level/RoadVisualizer.gd" id="5_rv"]
+[ext_resource type="Script" path="res://scripts/systems/special/SpecialSegmentManager.gd" id="6_ssm"]
+[ext_resource type="Script" path="res://scripts/systems/level/RestPointManager.gd" id="7_rpm"]
 
 [node name="Level02" type="Node2D"]
-
-[node name="LevelManager" type="Node" parent="."]
 script = ExtResource("1_lm")
 
-[node name="RoadVisualizer" type="Node2D" parent="."]
-script = ExtResource("2_rv")
+[node name="SpawnSystem" type="Node" parent="."]
+script = ExtResource("2_ss")
+
+[node name="ChaseSystem" type="Node" parent="."]
+script = ExtResource("3_cs")
+
+[node name="BreakdownRecovery" type="Node2D" parent="."]
+script = ExtResource("4_br")
+
+[node name="SpecialSegmentManager" type="Node" parent="."]
+script = ExtResource("6_ssm")
+
+[node name="RestPointManager" type="Node" parent="."]
+script = ExtResource("7_rpm")
+
+[node name="RoadVisualizer" type="CanvasLayer" parent="."]
+script = ExtResource("5_rv")
 
 [node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.05, 0.05, 0.08, 1)
+z_index = -100
+offset_left = -500.0
+offset_top = -500.0
+offset_right = 2500.0
+offset_bottom = 1500.0
+color = Color(0.08, 0.04, 0.04, 1)
 
 [node name="VehicleSpawn" type="Marker2D" parent="."]
 position = Vector2(200, 540)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(1200, 540)

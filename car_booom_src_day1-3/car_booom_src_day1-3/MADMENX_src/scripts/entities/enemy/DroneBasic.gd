@@ -21,5 +21,6 @@ func perform_attack() -> void:
 		return
 	attack_triggered.emit()
 	AudioManager.play_sfx("enemy_attack")
-	var dir = (target_node.global_position - global_position).normalized()
-	BulletFactory.create_enemy_bullet("enemy_basic", dir, attack_damage)
+	# 垂直视角：从上向下发射弹幕
+	var dir = Vector2(0, 1)  # 默认向下发射
+	BulletFactory.create_enemy_bullet("enemy_basic", dir, attack_damage, global_position)

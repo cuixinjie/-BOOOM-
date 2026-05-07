@@ -14,6 +14,8 @@ extends Control
 @onready var nitro_bar: ProgressBar = $VBox/NitroBar if has_node("VBox/NitroBar") else null
 @onready var coin_label: Label = $VBox/CoinLabel if has_node("VBox/CoinLabel") else null
 @onready var level_label: Label = $VBox/LevelLabel if has_node("VBox/LevelLabel") else null
+@onready var prof_bar: ProgressBar = $VBox/ProfBar if has_node("VBox/ProfBar") else null
+@onready var prof_label: Label = $VBox/ProfLabel if has_node("VBox/ProfLabel") else null
 
 func _ready() -> void:
 	_update_display()
@@ -61,6 +63,36 @@ func update_energy(amount: float) -> void:
 func update_level(level: int) -> void:
 	if level_label:
 		level_label.text = "Lv.%d" % level
+
+## 更新当前武器熟练度进度（Day 5）
+func update_proficiency_bar(weapon_type: String, proficiency: float, level: int, progress: float) -> void:
+	if prof_bar:
+		prof_bar.max_value = 100.0
+		prof_bar.value = progress * 100.0
+	if prof_label:
+		# 获取武器类型中文名
+		var type_name = _get_weapon_type_name(weapon_type)
+		prof_label.text = "%s Lv.%d (%.0f%%)" % [type_name, level, progress * 100.0]
+
+## 直接更新熟练度进度条（Day 4 - EconomySystem熟练度）
+func update_economy_proficiency(proficiency: float, max_proficiency: float) -> void:
+	if prof_bar:
+		prof_bar.max_value = max_proficiency
+		prof_bar.value = proficiency
+	if prof_label:
+		var percent = (proficiency / max_proficiency) * 100.0 if max_proficiency > 0 else 0.0
+		prof_label.text = "熟练度 %.0f/%.0f (%.0f%%)" % [proficiency, max_proficiency, percent]
+
+## 获取武器类型中文名
+func _get_weapon_type_name(weapon_type: String) -> String:
+	var names = {
+		"pistol": "手枪",
+		"smg": "冲锋枪",
+		"shotgun": "霰弹枪",
+		"rifle": "狙击枪",
+		"laser": "激光枪"
+	}
+	return names.get(weapon_type, weapon_type)
 
 func update_skill_cooldown(slot: int, progress: float) -> void:
 	pass
